@@ -2,7 +2,7 @@ name: ruang
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -36,6 +36,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   firebase_core: ^4.0.0
   google_fonts: ^6.3.0
+  firebase_auth: ^6.0.0
+  font_awesome_flutter: ^10.8.0
+  lottie: ^3.3.1
+  smooth_page_indicator: ^1.2.1
+  flip_card: ^0.7.0
 
 dev_dependencies:
   flutter_test:
@@ -53,11 +58,16 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/images/intro1.json
+    - assets/images/intro2.json
+    - assets/images/intro3.json
+    - assets/images/logo Ruang.png
+    - assets/images/background.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
