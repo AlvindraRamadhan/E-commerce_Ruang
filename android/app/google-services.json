@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "522301218733",
+    "project_id": "ruang-app-668eb",
+    "storage_bucket": "ruang-app-668eb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522301218733:android:e59bc394e1cd477b988b24",
+        "android_client_info": {
+          "package_name": "com.example.ruang"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLp_V0XxsZe5RkK_wcGxwQBVYXLdPj7cY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
