@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return MaterialApp(
-      title: 'RUANG',
+      title: 'RUANG | Premium Furniture & Decor',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xFFF8F8F8),
