@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:ruang/presentation/screens/auth/auth_gate.dart';
+import 'package:ruang/presentation/screens/main/main_wrapper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,38 +10,21 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  // Flag untuk memastikan precache hanya berjalan sekali
-  bool _isImagePrecached = false;
-
   @override
   void initState() {
     super.initState();
-    // Navigasi otomatis setelah 3 detik. Logika ini tetap di sini.
+    // Setelah 3 detik, navigasi ke MainWrapper
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const AuthGate()),
+          MaterialPageRoute(builder: (context) => const MainWrapper()),
         );
       }
     });
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // PERBAIKAN: Pindahkan precaching ke sini.
-    // Kode ini akan memuat gambar untuk halaman login/register di latar belakang
-    // agar transisinya mulus dan tidak flicker.
-    if (!_isImagePrecached) {
-      precacheImage(const AssetImage("assets/images/background.jpg"), context);
-      _isImagePrecached = true;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // Kode untuk UI tetap sama, tidak perlu diubah.
-    // Kita hanya memindahkan logika, bukan tampilan.
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Center(
@@ -59,7 +42,8 @@ class _SplashScreenState extends State<SplashScreen> {
                     borderRadius: BorderRadius.circular(24),
                   ),
                 ),
-                Image.asset('assets/images/logo RUANG.png', width: 180),
+                Image.asset('assets/images/logo RUANG.png',
+                    width: 180), // Pastikan nama file logo benar
               ],
             ),
             const SizedBox(height: 40),
@@ -69,8 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
               child: CircularProgressIndicator(
                 strokeWidth: 2.5,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).scaffoldBackgroundColor,
-                ),
+                    Theme.of(context).scaffoldBackgroundColor),
               ),
             ),
           ],

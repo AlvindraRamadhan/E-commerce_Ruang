@@ -6,9 +6,7 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   runApp(const MyApp());
 }
 
@@ -31,24 +29,18 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
         textTheme: GoogleFonts.interTextTheme(textTheme).copyWith(
-          displayLarge: GoogleFonts.playfairDisplayTextTheme(
-            textTheme,
-          ).displayLarge,
-          displayMedium: GoogleFonts.playfairDisplayTextTheme(
-            textTheme,
-          ).displayMedium,
-          displaySmall: GoogleFonts.playfairDisplayTextTheme(
-            textTheme,
-          ).displaySmall,
-          headlineMedium: GoogleFonts.playfairDisplayTextTheme(
-            textTheme,
-          ).headlineMedium,
-          headlineSmall: GoogleFonts.playfairDisplayTextTheme(
-            textTheme,
-          ).headlineSmall,
-          titleLarge: GoogleFonts.playfairDisplayTextTheme(
-            textTheme,
-          ).titleLarge,
+          displayLarge:
+              GoogleFonts.playfairDisplayTextTheme(textTheme).displayLarge,
+          displayMedium:
+              GoogleFonts.playfairDisplayTextTheme(textTheme).displayMedium,
+          displaySmall:
+              GoogleFonts.playfairDisplayTextTheme(textTheme).displaySmall,
+          headlineMedium:
+              GoogleFonts.playfairDisplayTextTheme(textTheme).headlineMedium,
+          headlineSmall:
+              GoogleFonts.playfairDisplayTextTheme(textTheme).headlineSmall,
+          titleLarge:
+              GoogleFonts.playfairDisplayTextTheme(textTheme).titleLarge,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
