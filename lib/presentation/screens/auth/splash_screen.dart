@@ -10,14 +10,36 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  // Variabel untuk mengontrol animasi fade-in yang elegan
+  double _opacity = 0.0;
+
   @override
   void initState() {
     super.initState();
-    // Setelah 3 detik, navigasi ke MainWrapper
+
+    // Memberi jeda sesaat agar animasi fade-in terlihat
+    Timer(const Duration(milliseconds: 100), () {
+      if (mounted) {
+        setState(() {
+          _opacity = 1.0;
+        });
+      }
+    });
+
+    // Navigasi otomatis setelah 1 detik
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const MainWrapper()),
+          // Menggunakan transisi fade agar perpindahan halaman lebih mulus
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const MainWrapper(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            transitionDuration: const Duration(milliseconds: 800),
+          ),
         );
       }
     });
@@ -26,37 +48,43 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: 220,
-                  height: 220,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.circular(24),
+      // Menggunakan warna cream dari tema Anda
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: Container(
+        // Dekorasi untuk efek cahaya dari kiri
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            center: const Alignment(-0.9, 0.0), // Posisi cahaya di kiri
+            radius: 1.5, // Radius cahaya agar terlihat lembut
+            colors: [
+              Colors.white.withAlpha(102), // Pusat cahaya yang lebih terang
+              Theme.of(context)
+                  .scaffoldBackgroundColor, // Memudar ke warna latar
+            ],
+          ),
+        ),
+        child: Center(
+          // Animasi fade-in untuk logo
+          child: AnimatedOpacity(
+            opacity: _opacity,
+            duration: const Duration(milliseconds: 800),
+            child: Container(
+              // Memberi bayangan lembut agar logo terkesan sedikit terangkat
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(26),
+                    blurRadius: 25,
+                    spreadRadius: 5,
                   ),
-                ),
-                Image.asset('assets/images/logo RUANG.png',
-                    width: 180), // Pastikan nama file logo benar
-              ],
-            ),
-            const SizedBox(height: 40),
-            SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).scaffoldBackgroundColor),
+                ],
+              ),
+              child: Image.asset(
+                'assets/images/logo RUANG.png', // Pastikan nama file ini benar
+                width: 180,
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
