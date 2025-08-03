@@ -22,6 +22,8 @@ dependencies:
   lottie: ^3.1.2
   smooth_page_indicator: ^1.1.0
   flip_card: ^0.7.0
+  cloud_firestore: ^4.17.5
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:

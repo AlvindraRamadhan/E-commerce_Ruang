@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:ruang/presentation/screens/main/home_screen.dart';
+import 'package:ruang/presentation/screens/main/home_page.dart';
 import 'package:ruang/services/auth_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -77,12 +77,9 @@ class _LoginFormState extends State<LoginForm> {
         _passwordController.text.trim(),
       );
 
-      // PERUBAHAN: Durasi loading diubah menjadi 1.5 detik
-      await Future.delayed(const Duration(milliseconds: 1500));
-
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
           (route) => false,
         );
       }
@@ -103,10 +100,9 @@ class _LoginFormState extends State<LoginForm> {
     );
     try {
       await AuthService().signInWithGoogle();
-
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
           (route) => false,
         );
       }
@@ -178,13 +174,9 @@ class _RegisterFormState extends State<RegisterForm> {
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
-
-      // PERUBAHAN: Durasi loading diubah menjadi 1.5 detik
-      await Future.delayed(const Duration(milliseconds: 1500));
-
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
           (route) => false,
         );
       }
@@ -231,7 +223,7 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 }
 
-// === AUTH CARD (WIDGET TAMPILAN) ===
+// === WIDGET LAINNYA (TIDAK ADA PERUBAHAN) ===
 class AuthCard extends StatelessWidget {
   final String title;
   final List<Widget> fields;
@@ -335,7 +327,6 @@ class AuthCard extends StatelessWidget {
   }
 }
 
-// === AUTH TEXT FIELD (WIDGET TAMPILAN) ===
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
