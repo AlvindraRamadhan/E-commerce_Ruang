@@ -25,6 +25,7 @@ dependencies:
   cloud_firestore: ^4.17.5
   intl: ^0.20.2
   http: ^1.4.0
+  skeletonizer: ^2.1.0+1
 
 dev_dependencies:
   flutter_test:

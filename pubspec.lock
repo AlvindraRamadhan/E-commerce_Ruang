@@ -424,6 +424,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.3"
+  skeletonizer:
+    dependency: "direct main"
+    description:
+      name: skeletonizer
+      sha256: eebc03dc86b298e2d7f61e0ebce5713e9dbbc3e786f825909b4591756f196eb6
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0+1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -527,4 +535,4 @@ packages:
     version: "1.1.0"
 sdks:
   dart: ">=3.7.0 <4.0.0"
-  flutter: ">=3.27.0"
+  flutter: ">=3.31.0-0.0.pre"

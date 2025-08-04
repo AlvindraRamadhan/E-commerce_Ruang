@@ -21,21 +21,25 @@ class _HomePageState extends State<HomePage> {
     'https://images.pexels.com/photos/276528/pexels-photo-276528.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/6492397/pexels-photo-6492397.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   ];
+  final List<String> categories = [
+    'Kursi',
+    'Meja',
+    'Lampu',
+    'Sofa',
+    'Lemari',
+    'Dekorasi'
+  ];
 
   @override
   void initState() {
     super.initState();
     _bannerTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (_bannerController.hasClients) {
+      if (_bannerController.hasClients && _bannerController.page != null) {
         int nextPage = _bannerController.page!.toInt() + 1;
-        if (nextPage >= promoBanners.length) {
-          nextPage = 0;
-        }
-        _bannerController.animateToPage(
-          nextPage,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-        );
+        if (nextPage >= promoBanners.length) nextPage = 0;
+        _bannerController.animateToPage(nextPage,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOut);
       }
     });
   }
@@ -53,8 +57,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const ChatScreen()),
-          );
+              MaterialPageRoute(builder: (context) => const ChatScreen()));
         },
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.support_agent, color: Colors.white),
@@ -105,10 +108,8 @@ class _HomePageState extends State<HomePage> {
                       clipBehavior: Clip.antiAlias,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
-                      child: Image.network(
-                        promoBanners[index],
-                        fit: BoxFit.cover,
-                      ),
+                      child:
+                          Image.network(promoBanners[index], fit: BoxFit.cover),
                     );
                   },
                 ),
@@ -117,6 +118,34 @@ class _HomePageState extends State<HomePage> {
             const SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                child: Text('Jelajahi Kategori',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 40,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categories.length,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Chip(
+                        label: Text(categories[index]),
+                        backgroundColor: Colors.white,
+                        side: BorderSide(color: Colors.grey.shade300),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(16, 24, 16, 16),
                 child: Text('Semua Produk',
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -126,20 +155,17 @@ class _HomePageState extends State<HomePage> {
               stream:
                   FirebaseFirestore.instance.collection('products').snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SliverToBoxAdapter(
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const SliverToBoxAdapter(
-                    child: Center(child: Text('Belum ada produk.')),
-                  );
+                      child: SizedBox
+                          .shrink()); 
                 }
+
                 final products = snapshot.data!.docs.map((doc) {
                   final data = doc.data() as Map<String, dynamic>;
                   return Product.fromFirestore(data, doc.id);
                 }).toList();
+
                 return SliverPadding(
                   padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 80.0),
                   sliver: SliverGrid.builder(

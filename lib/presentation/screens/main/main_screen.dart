@@ -3,6 +3,7 @@ import 'package:ruang/presentation/screens/main/cart_page.dart';
 import 'package:ruang/presentation/screens/main/home_page.dart';
 import 'package:ruang/presentation/screens/main/profile_page.dart';
 import 'package:ruang/presentation/screens/main/search_page.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -13,12 +14,25 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  bool _isLoading = true;
 
-  final List<Widget> _pages = [
-    const HomePage(), // Nanti akan kita isi
-    const SearchPage(),
-    const CartPage(),
-    const ProfilePage(),
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+  }
+
+  static const List<Widget> _pages = <Widget>[
+    HomePage(),
+    SearchPage(),
+    CartPage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -30,11 +44,18 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: Skeletonizer(
+        enabled: _isLoading,
+        effect: ShimmerEffect(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.green.shade100,
+        ),
+        child: _pages.elementAt(_selectedIndex),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed, // Agar warna label selalu terlihat
+        type: BottomNavigationBarType.fixed,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Colors.grey,
         items: const [
