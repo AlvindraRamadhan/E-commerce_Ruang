@@ -41,3 +41,4 @@ flutter:
     - assets/images/logo Ruang.png
     - assets/images/background.jpg
     - assets/images/error_animation.json
+    - assets/images/loading_animation.json
