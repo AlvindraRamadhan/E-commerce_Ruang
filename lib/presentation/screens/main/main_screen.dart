@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart'; 
+import 'package:lottie/lottie.dart';
 import 'package:ruang/presentation/screens/main/cart_page.dart';
 import 'package:ruang/presentation/screens/main/home_page.dart';
 import 'package:ruang/presentation/screens/main/profile_page.dart';
 import 'package:ruang/presentation/screens/main/search_page.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -14,7 +15,21 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  bool _isPageLoading = false; 
+
+  bool _isInitialLoading = true;
+  bool _isPageSwitching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      if (mounted) {
+        setState(() {
+          _isInitialLoading = false;
+        });
+      }
+    });
+  }
 
   static const List<Widget> _pages = <Widget>[
     HomePage(),
@@ -24,31 +39,42 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   void _onItemTapped(int index) {
-    if (_selectedIndex == index) return;
+    if (_selectedIndex == index || _isPageSwitching) return;
 
     setState(() {
-      _isPageLoading = true;
+      _isPageSwitching = true;
     });
 
     Future.delayed(const Duration(milliseconds: 1500), () {
       if (mounted) {
         setState(() {
           _selectedIndex = index;
-          _isPageLoading = false; 
+          _isPageSwitching = false;
         });
       }
     });
   }
 
+  Widget _buildBody() {
+    if (_isPageSwitching) {
+      return Center(
+          child:
+              Lottie.asset('assets/images/loading_animation.json', width: 150));
+    }
+    return Skeletonizer(
+      enabled: _isInitialLoading,
+      effect: ShimmerEffect(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.green.shade100,
+      ),
+      child: _pages.elementAt(_selectedIndex),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _isPageLoading
-            ? Lottie.asset('assets/images/loading_animation.json',
-                width: 150)
-            : _pages.elementAt(_selectedIndex),
-      ),
+      body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
