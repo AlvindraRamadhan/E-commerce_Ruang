@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
               pinned: true,
               title: Row(
                 children: [
-                  Image.asset('assets/images/logo RUANG.png', height: 28),
+                  Image.asset('assets/images/logo RUANG.png', height: 38),
                   const SizedBox(width: 8),
                   Text('RUANG', style: Theme.of(context).textTheme.titleLarge),
                 ],
