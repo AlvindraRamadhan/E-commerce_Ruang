@@ -1,1 +1,38 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"ruang-app-668eb","appId":"1:522301218733:android:e59bc394e1cd477b988b24","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"ruang-app-668eb","configurations":{"android":"1:522301218733:android:e59bc394e1cd477b988b24","ios":"1:522301218733:ios:3827ba1e4b8b22fe988b24","macos":"1:522301218733:ios:3827ba1e4b8b22fe988b24","web":"1:522301218733:web:653b9eb97d8efbf1988b24","windows":"1:522301218733:web:d27474dd86216112988b24"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "ruang-app-668eb",
+          "appId": "1:522301218733:android:e59bc394e1cd477b988b24",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "ruang-app-668eb",
+          "configurations": {
+            "android": "1:522301218733:android:e59bc394e1cd477b988b24",
+            "ios": "1:522301218733:ios:3827ba1e4b8b22fe988b24",
+            "macos": "1:522301218733:ios:3827ba1e4b8b22fe988b24",
+            "web": "1:522301218733:web:653b9eb97d8efbf1988b24",
+            "windows": "1:522301218733:web:d27474dd86216112988b24"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}

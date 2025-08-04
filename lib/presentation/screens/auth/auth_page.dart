@@ -1,13 +1,12 @@
 import 'dart:ui';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:ruang/presentation/screens/main/home_page.dart';
+import 'package:ruang/presentation/screens/main/main_screen.dart'; // Target Navigasi yang Benar
 import 'package:ruang/services/auth_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
-
   @override
   State<AuthPage> createState() => _AuthPageState();
 }
@@ -51,11 +50,10 @@ class _AuthPageState extends State<AuthPage> {
   }
 }
 
-// === LOGIN FORM ===
+// === LOGIN FORM DENGAN NAVIGASI MANUAL ===
 class LoginForm extends StatefulWidget {
   final VoidCallback onFlip;
   const LoginForm({super.key, required this.onFlip});
-
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
@@ -63,58 +61,53 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   Future<void> _signIn() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
-
+    setState(() => _isLoading = true);
     try {
       await AuthService().signInWithEmailAndPassword(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
-
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => const MainScreen()),
           (route) => false,
         );
       }
     } on Exception catch (e) {
-      if (mounted) Navigator.pop(context);
       if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(e.toString())));
       }
+    }
+    if (mounted) {
+      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _signInWithGoogle() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
+    setState(() => _isLoading = true);
     try {
       await AuthService().signInWithGoogle();
       if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomePage()),
+         Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const MainScreen()),
           (route) => false,
         );
       }
     } on Exception catch (e) {
-      if (mounted) Navigator.pop(context);
       if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(e.toString())));
       }
     }
+    if(mounted){
+      setState(() => _isLoading = false);
+    }
   }
-
+  
   @override
   void dispose() {
     _emailController.dispose();
@@ -125,6 +118,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return AuthCard(
+      isLoading: _isLoading,
       title: 'Selamat Datang',
       fields: [
         AuthTextField(controller: _emailController, labelText: 'Email'),
@@ -143,7 +137,6 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 }
-
 // === REGISTER FORM ===
 class RegisterForm extends StatefulWidget {
   final VoidCallback onFlip;
@@ -151,11 +144,11 @@ class RegisterForm extends StatefulWidget {
   @override
   State<RegisterForm> createState() => _RegisterFormState();
 }
-
 class _RegisterFormState extends State<RegisterForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool _isLoading = false;
 
   Future<void> _signUp() async {
     if (_passwordController.text.trim() !=
@@ -164,28 +157,26 @@ class _RegisterFormState extends State<RegisterForm> {
           .showSnackBar(const SnackBar(content: Text("Password tidak cocok.")));
       return;
     }
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
+    setState(() => _isLoading = true);
     try {
       await AuthService().createUserWithEmailAndPassword(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
-      if (mounted) {
+       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => const MainScreen()),
           (route) => false,
         );
       }
     } on Exception catch (e) {
-      if (mounted) Navigator.pop(context);
       if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(e.toString())));
       }
+    }
+     if (mounted) {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -196,10 +187,10 @@ class _RegisterFormState extends State<RegisterForm> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return AuthCard(
+      isLoading: _isLoading,
       title: 'Buat Akun Baru',
       fields: [
         AuthTextField(controller: _emailController, labelText: 'Email'),
@@ -223,8 +214,9 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 }
 
-// === WIDGET LAINNYA (TIDAK ADA PERUBAHAN) ===
+// === AUTH CARD ===
 class AuthCard extends StatelessWidget {
+  final bool isLoading;
   final String title;
   final List<Widget> fields;
   final String primaryButtonText;
@@ -235,6 +227,7 @@ class AuthCard extends StatelessWidget {
   final VoidCallback onSecondaryButtonPressed;
   const AuthCard({
     super.key,
+    required this.isLoading,
     required this.title,
     required this.fields,
     required this.primaryButtonText,
@@ -246,80 +239,82 @@ class AuthCard extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.85,
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-              color: Colors.white.withAlpha(51),
-              borderRadius: BorderRadius.circular(20),
-              border:
-                  Border.all(color: Colors.white.withAlpha(76), width: 1.5)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 24),
-              ...fields,
-              const SizedBox(height: 24),
-              SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                      onPressed: onPrimaryButtonPressed,
-                      child: Text(primaryButtonText))),
-              if (onGoogleButtonPressed != null) ...[
-                const SizedBox(height: 16),
-                const Row(
-                  children: [
-                    Expanded(child: Divider(color: Colors.white70)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child:
-                          Text('ATAU', style: TextStyle(color: Colors.white)),
-                    ),
-                    Expanded(child: Divider(color: Colors.white70)),
-                  ],
+    return IgnorePointer(
+      ignoring: isLoading,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+                color: Colors.white.withAlpha(51),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.white.withAlpha(76), width: 1.5)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 16),
-                ElevatedButton.icon(
-                  onPressed: onGoogleButtonPressed,
-                  icon: const FaIcon(FontAwesomeIcons.google, size: 18),
-                  label: const Text('Lanjutkan dengan Google'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
+                const SizedBox(height: 24),
+                ...fields,
+                const SizedBox(height: 24),
+                SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: onPrimaryButtonPressed,
+                        child: isLoading ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3,)) : Text(primaryButtonText))),
+                if (onGoogleButtonPressed != null) ...[
+                  const SizedBox(height: 16),
+                  const Row(
+                    children: [
+                      Expanded(child: Divider(color: Colors.white70)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child:
+                            Text('ATAU', style: TextStyle(color: Colors.white)),
+                      ),
+                      Expanded(child: Divider(color: Colors.white70)),
+                    ],
                   ),
-                ),
-              ],
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(secondaryText,
-                      style: const TextStyle(color: Colors.white)),
-                  GestureDetector(
-                    onTap: onSecondaryButtonPressed,
-                    child: Text(
-                      secondaryButtonText,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.white),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: onGoogleButtonPressed,
+                    icon: const FaIcon(FontAwesomeIcons.google, size: 18),
+                    label: const Text('Lanjutkan dengan Google'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
                     ),
                   ),
                 ],
-              ),
-            ],
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(secondaryText,
+                        style: const TextStyle(color: Colors.white)),
+                    GestureDetector(
+                      onTap: onSecondaryButtonPressed,
+                      child: Text(
+                        secondaryButtonText,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -327,6 +322,7 @@ class AuthCard extends StatelessWidget {
   }
 }
 
+// === AUTH TEXT FIELD ===
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;

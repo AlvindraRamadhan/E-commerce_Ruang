@@ -24,6 +24,7 @@ dependencies:
   flip_card: ^0.7.0
   cloud_firestore: ^4.17.5
   intl: ^0.20.2
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:
@@ -38,3 +39,4 @@ flutter:
     - assets/images/intro3.json
     - assets/images/logo Ruang.png
     - assets/images/background.jpg
+    - assets/images/error_animation.json
