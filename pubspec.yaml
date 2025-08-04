@@ -42,3 +42,4 @@ flutter:
     - assets/images/background.jpg
     - assets/images/error_animation.json
     - assets/images/loading_animation.json
+    - assets/images/failed.json

@@ -1,7 +1,8 @@
 import 'dart:ui';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:ruang/presentation/screens/main/main_screen.dart'; // Target Navigasi yang Benar
+import 'package:lottie/lottie.dart';
+import 'package:ruang/presentation/screens/main/main_screen.dart';
 import 'package:ruang/services/auth_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -50,7 +51,7 @@ class _AuthPageState extends State<AuthPage> {
   }
 }
 
-// === LOGIN FORM DENGAN NAVIGASI MANUAL ===
+// === LOGIN FORM ===
 class LoginForm extends StatefulWidget {
   final VoidCallback onFlip;
   const LoginForm({super.key, required this.onFlip});
@@ -62,6 +63,49 @@ class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
+
+  // DIALOG ERROR
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Lottie.asset('assets/images/failed.json', width: 120),
+              const SizedBox(height: 16),
+              Text(
+                'Login Gagal',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "Email atau password yang Anda masukkan salah atau belum terdaftar.",
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                widget.onFlip();
+              },
+              child: const Text('Daftar'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Coba Lagi'),
+            )
+          ],
+        );
+      },
+    );
+  }
 
   Future<void> _signIn() async {
     setState(() => _isLoading = true);
@@ -76,11 +120,8 @@ class _LoginFormState extends State<LoginForm> {
           (route) => false,
         );
       }
-    } on Exception catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
-      }
+    } on Exception {
+      _showErrorDialog();
     }
     if (mounted) {
       setState(() => _isLoading = false);
@@ -92,22 +133,19 @@ class _LoginFormState extends State<LoginForm> {
     try {
       await AuthService().signInWithGoogle();
       if (mounted) {
-         Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const MainScreen()),
           (route) => false,
         );
       }
-    } on Exception catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
-      }
+    } on Exception {
+      _showErrorDialog();
     }
-    if(mounted){
+    if (mounted) {
       setState(() => _isLoading = false);
     }
   }
-  
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -137,6 +175,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 }
+
 // === REGISTER FORM ===
 class RegisterForm extends StatefulWidget {
   final VoidCallback onFlip;
@@ -144,6 +183,7 @@ class RegisterForm extends StatefulWidget {
   @override
   State<RegisterForm> createState() => _RegisterFormState();
 }
+
 class _RegisterFormState extends State<RegisterForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -163,7 +203,7 @@ class _RegisterFormState extends State<RegisterForm> {
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
-       if (mounted) {
+      if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const MainScreen()),
           (route) => false,
@@ -175,7 +215,7 @@ class _RegisterFormState extends State<RegisterForm> {
             .showSnackBar(SnackBar(content: Text(e.toString())));
       }
     }
-     if (mounted) {
+    if (mounted) {
       setState(() => _isLoading = false);
     }
   }
@@ -187,6 +227,7 @@ class _RegisterFormState extends State<RegisterForm> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return AuthCard(
@@ -251,7 +292,8 @@ class AuthCard extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.white.withAlpha(51),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white.withAlpha(76), width: 1.5)),
+                border:
+                    Border.all(color: Colors.white.withAlpha(76), width: 1.5)),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -269,7 +311,15 @@ class AuthCard extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                         onPressed: onPrimaryButtonPressed,
-                        child: isLoading ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3,)) : Text(primaryButtonText))),
+                        child: isLoading
+                            ? const SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 3,
+                                ))
+                            : Text(primaryButtonText))),
                 if (onGoogleButtonPressed != null) ...[
                   const SizedBox(height: 16),
                   const Row(
