@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:ruang/presentation/providers/cart_provider.dart';
 import 'package:ruang/presentation/screens/main/cart_page.dart';
 import 'package:ruang/presentation/screens/main/home_page.dart';
 import 'package:ruang/presentation/screens/main/profile_page.dart';
@@ -40,11 +42,9 @@ class _MainScreenState extends State<MainScreen> {
 
   void _onItemTapped(int index) {
     if (_selectedIndex == index || _isPageSwitching) return;
-
     setState(() {
       _isPageSwitching = true;
     });
-
     Future.delayed(const Duration(milliseconds: 1500), () {
       if (mounted) {
         setState(() {
@@ -81,23 +81,31 @@ class _MainScreenState extends State<MainScreen> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),
             label: 'Beranda',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.search_outlined),
             activeIcon: Icon(Icons.search),
             label: 'Pencarian',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart_outlined),
-            activeIcon: Icon(Icons.shopping_cart),
+            icon: Consumer<CartProvider>(
+              builder: (context, cart, child) {
+                return Badge(
+                  label: Text(cart.totalUniqueItems.toString()),
+                  isLabelVisible: cart.items.isNotEmpty,
+                  child: const Icon(Icons.shopping_cart_outlined),
+                );
+              },
+            ),
+            activeIcon: const Icon(Icons.shopping_cart),
             label: 'Keranjang',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             activeIcon: Icon(Icons.person),
             label: 'Profil',
