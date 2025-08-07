@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:ruang/presentation/screens/auth/auth_page.dart'; // Nanti akan kita revisi
+import 'package:ruang/presentation/screens/auth/language_selection_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
-
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
@@ -14,7 +13,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   bool onLastPage = false;
 
-  // Data untuk setiap halaman intro
   final List<Map<String, String>> introData = [
     {
       "animation": "assets/images/intro1.json",
@@ -35,13 +33,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           "Mulai bangun dan hias ruang yang benar-benar terasa seperti rumah.",
     },
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // PageView untuk halaman-halaman intro
           PageView.builder(
             controller: _controller,
             onPageChanged: (index) {
@@ -58,14 +54,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               );
             },
           ),
-
-          // Indikator titik dan tombol navigasi
           Container(
             alignment: const Alignment(0, 0.85),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // Tombol Skip
                 TextButton(
                   onPressed: () {
                     _controller.jumpToPage(introData.length - 1);
@@ -75,8 +68,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
                 ),
-
-                // Indikator Titik
                 SmoothPageIndicator(
                   controller: _controller,
                   count: introData.length,
@@ -85,15 +76,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     activeDotColor: Theme.of(context).primaryColor,
                   ),
                 ),
-
-                // Tombol Next / Done
                 onLastPage
                     ? TextButton(
                         onPressed: () {
+                          // --- PERBAIKAN UTAMA DI SINI ---
+                          // Arahkan ke LanguageSelectionScreen
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const AuthPage(),
+                              builder: (context) =>
+                                  const LanguageSelectionScreen(),
                             ),
                           );
                         },
@@ -127,7 +119,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-// Widget terpisah untuk konten setiap halaman onboarding
 class OnboardingPageContent extends StatelessWidget {
   final String animationPath;
   final String title;

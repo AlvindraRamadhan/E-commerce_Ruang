@@ -1,13 +1,17 @@
 name: ruang
 description: "A new Flutter project."
-publish_to: "none" 
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
+    sdk: flutter
+
+  # Ditambahkan untuk lokalisasi internal Flutter
+  flutter_localizations:
     sdk: flutter
 
   # Firebase & Auth
@@ -26,8 +30,9 @@ dependencies:
   intl: ^0.20.2
   http: ^1.4.0
   skeletonizer: ^2.1.0+1
-  provider: ^6.1.5
+  provider: ^6.1.2
   flutter_animate: ^4.5.2
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -36,11 +41,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
   assets:
     - assets/images/intro1.json
     - assets/images/intro2.json
     - assets/images/intro3.json
-    - assets/images/logo Ruang.png
+    - assets/images/logo RUANG.png
     - assets/images/background.jpg
     - assets/images/error_animation.json
     - assets/images/loading_animation.json

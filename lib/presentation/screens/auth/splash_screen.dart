@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:ruang/presentation/screens/main/main_wrapper.dart';
+import 'package:ruang/presentation/screens/auth/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -42,7 +42,9 @@ class _SplashScreenState extends State<SplashScreen> {
       if (mounted) {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder: (_, __, ___) => const MainWrapper(),
+            // --- PERBAIKAN UTAMA DI SINI ---
+            // Arahkan ke OnboardingScreen, bukan LanguageSelectionScreen
+            pageBuilder: (_, __, ___) => const OnboardingScreen(),
             transitionsBuilder: (_, animation, __, child) {
               return FadeTransition(opacity: animation, child: child);
             },
