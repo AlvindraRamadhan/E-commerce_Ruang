@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:ruang/presentation/providers/cart_provider.dart';
-
+import 'package:ruang/presentation/screens/main/product_detail_page.dart'; 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
@@ -80,6 +80,15 @@ class CartPage extends StatelessWidget {
                         ),
                       ],
                     ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProductDetailPage(product: item.product),
+                        ),
+                      );
+                    },
                   ),
                 );
               },
