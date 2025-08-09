@@ -60,6 +60,19 @@ class AppStrings {
     'navSearch': 'Search',
     'navCart': 'Cart',
     'navProfile': 'Profile',
+
+    // Product Detail Page
+    'description': 'Description',
+    'addToCart': 'Add to Cart',
+    'itemAddedToCart': 'added to cart.',
+
+    // Cart Page
+    'cartTitle': 'Cart',
+    'emptyCartTitle': 'Your cart is empty',
+    'emptyCartDesc': 'Let\'s explore products and build your dream space!',
+    'total': 'Total:',
+    'checkout': 'Proceed to Checkout',
+    'checkoutFeatureMessage': 'Checkout feature is under development.',
   };
 
   static const Map<String, String> _id = {
@@ -121,6 +134,19 @@ class AppStrings {
     'navSearch': 'Pencarian',
     'navCart': 'Keranjang',
     'navProfile': 'Profil',
+
+    // Product Detail Page
+    'description': 'Deskripsi',
+    'addToCart': 'Tambah ke Keranjang',
+    'itemAddedToCart': 'ditambahkan ke keranjang.',
+
+    // Cart Page
+    'cartTitle': 'Keranjang',
+    'emptyCartTitle': 'Keranjangmu masih kosong',
+    'emptyCartDesc': 'Ayo jelajahi produk dan wujudkan ruang impianmu!',
+    'total': 'Total:',
+    'checkout': 'Lanjut ke Pembayaran',
+    'checkoutFeatureMessage': 'Fitur checkout sedang dalam pengembangan.',
   };
 
   static String get(Locale locale, String key) {

@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:ruang/l10n/app_strings.dart';
 import 'package:ruang/presentation/providers/cart_provider.dart';
-import 'package:ruang/presentation/screens/main/product_detail_page.dart'; 
+import 'package:ruang/presentation/providers/locale_provider.dart';
+import 'package:ruang/presentation/screens/main/product_detail_page.dart';
+
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LocaleProvider>().locale;
     final cart = Provider.of<CartProvider>(context);
     final currencyFormatter = NumberFormat.currency(
       locale: 'id_ID',
@@ -18,7 +22,8 @@ class CartPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Keranjang (${cart.totalUniqueItems})'),
+        title: Text(
+            '${AppStrings.get(locale, 'cartTitle')} (${cart.totalUniqueItems})'),
       ),
       body: cart.items.isEmpty
           ? Center(
@@ -31,13 +36,13 @@ class CartPage extends StatelessWidget {
                         width: 250),
                     const SizedBox(height: 24),
                     Text(
-                      'Keranjangmu masih kosong',
+                      AppStrings.get(locale, 'emptyCartTitle'),
                       style: Theme.of(context).textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      'Ayo jelajahi produk dan wujudkan ruang impianmu!',
+                    Text(
+                      AppStrings.get(locale, 'emptyCartDesc'),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -103,7 +108,7 @@ class CartPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Total:',
+                      Text(AppStrings.get(locale, 'total'),
                           style: Theme.of(context).textTheme.titleLarge),
                       Text(
                         currencyFormatter.format(cart.totalPrice),
@@ -118,12 +123,12 @@ class CartPage extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      child: const Text('Lanjut ke Pembayaran'),
+                      child: Text(AppStrings.get(locale, 'checkout')),
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                'Fitur checkout sedang dalam pengembangan.'),
+                          SnackBar(
+                            content: Text(AppStrings.get(
+                                locale, 'checkoutFeatureMessage')),
                           ),
                         );
                       },

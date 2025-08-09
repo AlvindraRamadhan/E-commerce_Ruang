@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart'; 
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:ruang/data/models/product_model.dart';
+import 'package:ruang/l10n/app_strings.dart';
 import 'package:ruang/presentation/providers/cart_provider.dart';
+import 'package:ruang/presentation/providers/locale_provider.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final Product product;
@@ -11,6 +13,7 @@ class ProductDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LocaleProvider>().locale;
     final currencyFormatter = NumberFormat.currency(
       locale: 'id_ID',
       symbol: 'Rp ',
@@ -65,7 +68,7 @@ class ProductDetailPage extends StatelessWidget {
                   const Divider(),
                   const SizedBox(height: 16),
                   Text(
-                    'Deskripsi',
+                    AppStrings.get(locale, 'description'),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
@@ -89,18 +92,19 @@ class ProductDetailPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton.icon(
           icon: const Icon(Icons.add_shopping_cart),
-          label: const Text('Tambah ke Keranjang'),
+          label: Text(AppStrings.get(locale, 'addToCart')),
           onPressed: () {
             context.read<CartProvider>().addItem(product);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('${product.name} ditambahkan ke keranjang.'),
+                content: Text(
+                    '${product.name} ${AppStrings.get(locale, 'itemAddedToCart')}'),
                 duration: const Duration(seconds: 2),
               ),
             );
           },
         ),
-      ).animate().fadeIn(delay: 600.ms), 
+      ).animate().fadeIn(delay: 600.ms),
     );
   }
 }
