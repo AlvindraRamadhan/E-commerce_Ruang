@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ruang/data/models/product_model.dart';
+import 'package:ruang/l10n/app_strings.dart';
+import 'package:ruang/presentation/providers/locale_provider.dart';
 import 'package:ruang/presentation/screens/main/chat_screen.dart';
 import 'package:ruang/presentation/widgets/product_card.dart';
 
@@ -21,13 +24,14 @@ class _HomePageState extends State<HomePage> {
     'https://images.pexels.com/photos/276528/pexels-photo-276528.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/6492397/pexels-photo-6492397.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   ];
-  final List<String> categories = [
-    'Kursi',
-    'Meja',
-    'Lampu',
-    'Sofa',
-    'Lemari',
-    'Dekorasi'
+
+  final List<String> categoryKeys = [
+    'categoryChair',
+    'categoryTable',
+    'categoryLamp',
+    'categorySofa',
+    'categoryCabinet',
+    'categoryDecoration'
   ];
 
   @override
@@ -53,6 +57,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LocaleProvider>().locale;
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -82,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: 'Cari furnitur impianmu...',
+                    hintText: AppStrings.get(locale, 'searchHint'),
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -115,12 +121,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                child: Text('Jelajahi Kategori',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                child: Text(AppStrings.get(locale, 'exploreCategories'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
             SliverToBoxAdapter(
@@ -128,13 +134,14 @@ class _HomePageState extends State<HomePage> {
                 height: 40,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: categories.length,
+                  itemCount: categoryKeys.length,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: Chip(
-                        label: Text(categories[index]),
+                        label:
+                            Text(AppStrings.get(locale, categoryKeys[index])),
                         backgroundColor: Colors.white,
                         side: BorderSide(color: Colors.grey.shade300),
                       ),
@@ -143,12 +150,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(16, 24, 16, 16),
-                child: Text('Semua Produk',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+                child: Text(AppStrings.get(locale, 'allProducts'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
             StreamBuilder<QuerySnapshot>(
@@ -156,9 +163,7 @@ class _HomePageState extends State<HomePage> {
                   FirebaseFirestore.instance.collection('products').snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const SliverToBoxAdapter(
-                      child: SizedBox
-                          .shrink()); 
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
                 }
 
                 final products = snapshot.data!.docs.map((doc) {

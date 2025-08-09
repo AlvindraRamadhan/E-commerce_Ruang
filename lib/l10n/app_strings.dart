@@ -43,6 +43,17 @@ class AppStrings {
         'The email or password you entered is incorrect or not registered.',
     'tryAgain': 'Try Again',
     'passwordMismatch': 'Passwords do not match.',
+
+    // Home Page
+    'searchHint': 'Search for your dream furniture...',
+    'exploreCategories': 'Explore Categories',
+    'allProducts': 'All Products',
+    'categoryChair': 'Chair',
+    'categoryTable': 'Table',
+    'categoryLamp': 'Lamp',
+    'categorySofa': 'Sofa',
+    'categoryCabinet': 'Cabinet',
+    'categoryDecoration': 'Decoration',
   };
 
   static const Map<String, String> _id = {
@@ -87,6 +98,17 @@ class AppStrings {
         'Email atau password yang Anda masukkan salah atau belum terdaftar.',
     'tryAgain': 'Coba Lagi',
     'passwordMismatch': 'Password tidak cocok.',
+
+    // Home Page
+    'searchHint': 'Cari furnitur impianmu...',
+    'exploreCategories': 'Jelajahi Kategori',
+    'allProducts': 'Semua Produk',
+    'categoryChair': 'Kursi',
+    'categoryTable': 'Meja',
+    'categoryLamp': 'Lampu',
+    'categorySofa': 'Sofa',
+    'categoryCabinet': 'Lemari',
+    'categoryDecoration': 'Dekorasi',
   };
 
   static String get(Locale locale, String key) {
