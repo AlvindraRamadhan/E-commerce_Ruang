@@ -79,6 +79,20 @@ class AppStrings {
     'chatHint': 'Ask about furniture...',
     'chatPlaceholder':
         'Sorry, the RUANG Virtual Assistant is currently under development and will be available soon!',
+
+    // Search & Profile Placeholders
+    'searchTitle': 'Search',
+    'featureInProgress': 'This Feature is Under Development',
+    'stayTuned': 'Stay tuned for the next update!',
+    'profileTitle': 'My Profile',
+    'logoutTooltip': 'Logout',
+    'logoutConfirmTitle': 'Confirm Logout',
+    'logoutConfirmDesc': 'Are you sure you want to log out?',
+    'cancel': 'Cancel',
+    'logout': 'Logout',
+    'loggedInAs': 'Logged in as:',
+    'noUser': 'No user',
+    'otherFeaturesInProgress': 'Other Features are Under Development',
   };
 
   static const Map<String, String> _id = {
@@ -159,6 +173,20 @@ class AppStrings {
     'chatHint': 'Tanyakan tentang furnitur...',
     'chatPlaceholder':
         'Mohon maaf, Asisten Virtual RUANG sedang dalam tahap pengembangan dan akan segera hadir!',
+
+    // Search & Profile Placeholders
+    'searchTitle': 'Pencarian',
+    'featureInProgress': 'Fitur Ini Sedang Dikembangkan',
+    'stayTuned': 'Nantikan pembaruan selanjutnya!',
+    'profileTitle': 'Profil Saya',
+    'logoutTooltip': 'Logout',
+    'logoutConfirmTitle': 'Konfirmasi Logout',
+    'logoutConfirmDesc': 'Apakah Anda yakin ingin keluar?',
+    'cancel': 'Batal',
+    'logout': 'Keluar',
+    'loggedInAs': 'Login sebagai:',
+    'noUser': 'Tidak ada user',
+    'otherFeaturesInProgress': 'Fitur Lainnya Sedang Dikembangkan',
   };
 
   static String get(Locale locale, String key) {

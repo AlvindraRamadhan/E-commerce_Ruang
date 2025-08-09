@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:ruang/l10n/app_strings.dart';
+import 'package:ruang/presentation/providers/locale_provider.dart';
 import 'package:ruang/presentation/screens/auth/auth_page.dart';
 import 'package:ruang/services/auth_service.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
-  // Fungsi untuk menampilkan dialog konfirmasi logout
   void _showLogoutDialog(BuildContext context) {
+    final locale = context.read<LocaleProvider>().locale;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Konfirmasi Logout'),
-          content: const Text('Apakah Anda yakin ingin keluar?'),
+          title: Text(AppStrings.get(locale, 'logoutConfirmTitle')),
+          content: Text(AppStrings.get(locale, 'logoutConfirmDesc')),
           actions: <Widget>[
             TextButton(
-              child: const Text('Batal'),
+              child: Text(AppStrings.get(locale, 'cancel')),
               onPressed: () {
-                Navigator.of(context).pop(); // Tutup dialog
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Keluar'),
+              child: Text(AppStrings.get(locale, 'logout')),
               onPressed: () async {
-                // Tutup dialog
                 Navigator.of(context).pop();
-                // Lakukan proses logout
                 await AuthService().signOut();
-                // Pindahkan ke halaman login
                 if (context.mounted) {
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => const AuthPage()),
@@ -45,17 +46,16 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mendapatkan data user yang sedang login
+    final locale = context.watch<LocaleProvider>().locale;
     final user = AuthService().currentUser;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profil Saya'),
+        title: Text(AppStrings.get(locale, 'profileTitle')),
         actions: [
-          // Tombol Logout di AppBar
           IconButton(
             icon: const Icon(Icons.logout),
-            tooltip: 'Logout',
+            tooltip: AppStrings.get(locale, 'logoutTooltip'),
             onPressed: () => _showLogoutDialog(context),
           ),
         ],
@@ -66,26 +66,22 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Menampilkan email pengguna
               Text(
-                'Login sebagai:',
+                AppStrings.get(locale, 'loggedInAs'),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
               Text(
-                user?.email ?? 'Tidak ada user',
+                user?.email ?? AppStrings.get(locale, 'noUser'),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
               const SizedBox(height: 40),
-
-              // Animasi Lottie placeholder
-              Lottie.asset('assets/images/error_animation.json',
-                  width: 250),
+              Lottie.asset('assets/images/error_animation.json', width: 250),
               const SizedBox(height: 24),
               Text(
-                'Fitur Lainnya Sedang Dikembangkan',
+                AppStrings.get(locale, 'otherFeaturesInProgress'),
                 style: Theme.of(context).textTheme.titleMedium,
                 textAlign: TextAlign.center,
               ),
