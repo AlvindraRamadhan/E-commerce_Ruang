@@ -38,6 +38,11 @@ class AppStrings {
     'haveAccount': 'Already have an account?',
     'loginHere': 'Login here',
     'or': 'OR',
+    'loginFailedTitle': 'Login Failed',
+    'loginFailedDesc':
+        'The email or password you entered is incorrect or not registered.',
+    'tryAgain': 'Try Again',
+    'passwordMismatch': 'Passwords do not match.',
   };
 
   static const Map<String, String> _id = {
@@ -77,9 +82,13 @@ class AppStrings {
     'haveAccount': 'Sudah punya akun?',
     'loginHere': 'Masuk di sini',
     'or': 'ATAU',
+    'loginFailedTitle': 'Login Gagal',
+    'loginFailedDesc':
+        'Email atau password yang Anda masukkan salah atau belum terdaftar.',
+    'tryAgain': 'Coba Lagi',
+    'passwordMismatch': 'Password tidak cocok.',
   };
 
-  // Logika baru: Terima Locale, kembalikan String yang benar
   static String get(Locale locale, String key) {
     if (locale.languageCode == 'id') {
       return _id[key] ?? key;

@@ -2,6 +2,9 @@ import 'dart:ui';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:ruang/l10n/app_strings.dart';
+import 'package:ruang/presentation/providers/locale_provider.dart';
 import 'package:ruang/presentation/screens/main/main_screen.dart';
 import 'package:ruang/services/auth_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -64,8 +67,9 @@ class _LoginFormState extends State<LoginForm> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  // DIALOG ERROR
   void _showErrorDialog() {
+    // Ambil locale di dalam method, karena context tersedia di sini
+    final locale = context.read<LocaleProvider>().locale;
     showDialog(
       context: context,
       builder: (context) {
@@ -78,12 +82,12 @@ class _LoginFormState extends State<LoginForm> {
               Lottie.asset('assets/images/failed.json', width: 120),
               const SizedBox(height: 16),
               Text(
-                'Login Gagal',
+                AppStrings.get(locale, 'loginFailedTitle'),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
-              const Text(
-                "Email atau password yang Anda masukkan salah atau belum terdaftar.",
+              Text(
+                AppStrings.get(locale, 'loginFailedDesc'),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -95,11 +99,11 @@ class _LoginFormState extends State<LoginForm> {
                 Navigator.of(context).pop();
                 widget.onFlip();
               },
-              child: const Text('Daftar'),
+              child: Text(AppStrings.get(locale, 'register')),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Coba Lagi'),
+              child: Text(AppStrings.get(locale, 'tryAgain')),
             )
           ],
         );
@@ -155,22 +159,27 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LocaleProvider>().locale;
     return AuthCard(
       isLoading: _isLoading,
-      title: 'Selamat Datang',
+      title: AppStrings.get(locale, 'welcome'),
       fields: [
-        AuthTextField(controller: _emailController, labelText: 'Email'),
+        AuthTextField(
+            controller: _emailController,
+            labelText: AppStrings.get(locale, 'email')),
         const SizedBox(height: 16),
         AuthTextField(
             controller: _passwordController,
-            labelText: 'Password',
+            labelText: AppStrings.get(locale, 'password'),
             obscureText: true),
       ],
-      primaryButtonText: 'Masuk',
+      primaryButtonText: AppStrings.get(locale, 'login'),
       onPrimaryButtonPressed: _signIn,
+      googleButtonText: AppStrings.get(locale, 'loginGoogle'),
       onGoogleButtonPressed: _signInWithGoogle,
-      secondaryText: 'Belum punya akun? ',
-      secondaryButtonText: 'Daftar sekarang',
+      separatorText: AppStrings.get(locale, 'or'),
+      secondaryText: '${AppStrings.get(locale, 'noAccount')} ',
+      secondaryButtonText: AppStrings.get(locale, 'registerNow'),
       onSecondaryButtonPressed: widget.onFlip,
     );
   }
@@ -191,10 +200,11 @@ class _RegisterFormState extends State<RegisterForm> {
   bool _isLoading = false;
 
   Future<void> _signUp() async {
+    final locale = context.read<LocaleProvider>().locale;
     if (_passwordController.text.trim() !=
         _confirmPasswordController.text.trim()) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Password tidak cocok.")));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppStrings.get(locale, 'passwordMismatch'))));
       return;
     }
     setState(() => _isLoading = true);
@@ -230,26 +240,29 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LocaleProvider>().locale;
     return AuthCard(
       isLoading: _isLoading,
-      title: 'Buat Akun Baru',
+      title: AppStrings.get(locale, 'createAccount'),
       fields: [
-        AuthTextField(controller: _emailController, labelText: 'Email'),
+        AuthTextField(
+            controller: _emailController,
+            labelText: AppStrings.get(locale, 'email')),
         const SizedBox(height: 16),
         AuthTextField(
             controller: _passwordController,
-            labelText: 'Password',
+            labelText: AppStrings.get(locale, 'password'),
             obscureText: true),
         const SizedBox(height: 16),
         AuthTextField(
             controller: _confirmPasswordController,
-            labelText: 'Konfirmasi Password',
+            labelText: AppStrings.get(locale, 'confirmPassword'),
             obscureText: true),
       ],
-      primaryButtonText: 'Daftar',
+      primaryButtonText: AppStrings.get(locale, 'register'),
       onPrimaryButtonPressed: _signUp,
-      secondaryText: 'Sudah punya akun? ',
-      secondaryButtonText: 'Masuk di sini',
+      secondaryText: '${AppStrings.get(locale, 'haveAccount')} ',
+      secondaryButtonText: AppStrings.get(locale, 'loginHere'),
       onSecondaryButtonPressed: widget.onFlip,
     );
   }
@@ -262,10 +275,13 @@ class AuthCard extends StatelessWidget {
   final List<Widget> fields;
   final String primaryButtonText;
   final VoidCallback onPrimaryButtonPressed;
+  final String? googleButtonText;
   final VoidCallback? onGoogleButtonPressed;
+  final String? separatorText;
   final String secondaryText;
   final String secondaryButtonText;
   final VoidCallback onSecondaryButtonPressed;
+
   const AuthCard({
     super.key,
     required this.isLoading,
@@ -273,11 +289,14 @@ class AuthCard extends StatelessWidget {
     required this.fields,
     required this.primaryButtonText,
     required this.onPrimaryButtonPressed,
+    this.googleButtonText,
     this.onGoogleButtonPressed,
+    this.separatorText,
     required this.secondaryText,
     required this.secondaryButtonText,
     required this.onSecondaryButtonPressed,
   });
+
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
@@ -322,22 +341,22 @@ class AuthCard extends StatelessWidget {
                             : Text(primaryButtonText))),
                 if (onGoogleButtonPressed != null) ...[
                   const SizedBox(height: 16),
-                  const Row(
+                  Row(
                     children: [
-                      Expanded(child: Divider(color: Colors.white70)),
+                      const Expanded(child: Divider(color: Colors.white70)),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child:
-                            Text('ATAU', style: TextStyle(color: Colors.white)),
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(separatorText ?? 'OR',
+                            style: const TextStyle(color: Colors.white)),
                       ),
-                      Expanded(child: Divider(color: Colors.white70)),
+                      const Expanded(child: Divider(color: Colors.white70)),
                     ],
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: onGoogleButtonPressed,
                     icon: const FaIcon(FontAwesomeIcons.google, size: 18),
-                    label: const Text('Lanjutkan dengan Google'),
+                    label: Text(googleButtonText ?? 'Continue with Google'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
