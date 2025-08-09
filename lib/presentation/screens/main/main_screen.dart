@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:ruang/l10n/app_strings.dart';
 import 'package:ruang/presentation/providers/cart_provider.dart';
+import 'package:ruang/presentation/providers/locale_provider.dart';
 import 'package:ruang/presentation/screens/main/cart_page.dart';
 import 'package:ruang/presentation/screens/main/home_page.dart';
 import 'package:ruang/presentation/screens/main/profile_page.dart';
@@ -73,6 +75,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LocaleProvider>().locale;
+
     return Scaffold(
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
@@ -82,15 +86,15 @@ class _MainScreenState extends State<MainScreen> {
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Colors.grey,
         items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Beranda',
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: const Icon(Icons.home),
+            label: AppStrings.get(locale, 'navHome'),
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.search_outlined),
-            activeIcon: Icon(Icons.search),
-            label: 'Pencarian',
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.search_outlined),
+            activeIcon: const Icon(Icons.search),
+            label: AppStrings.get(locale, 'navSearch'),
           ),
           BottomNavigationBarItem(
             icon: Consumer<CartProvider>(
@@ -103,12 +107,12 @@ class _MainScreenState extends State<MainScreen> {
               },
             ),
             activeIcon: const Icon(Icons.shopping_cart),
-            label: 'Keranjang',
+            label: AppStrings.get(locale, 'navCart'),
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profil',
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.person_outline),
+            activeIcon: const Icon(Icons.person),
+            label: AppStrings.get(locale, 'navProfile'),
           ),
         ],
       ),

@@ -54,6 +54,12 @@ class AppStrings {
     'categorySofa': 'Sofa',
     'categoryCabinet': 'Cabinet',
     'categoryDecoration': 'Decoration',
+
+    // Navigation Bar
+    'navHome': 'Home',
+    'navSearch': 'Search',
+    'navCart': 'Cart',
+    'navProfile': 'Profile',
   };
 
   static const Map<String, String> _id = {
@@ -109,6 +115,12 @@ class AppStrings {
     'categorySofa': 'Sofa',
     'categoryCabinet': 'Lemari',
     'categoryDecoration': 'Dekorasi',
+
+    // Navigation Bar
+    'navHome': 'Beranda',
+    'navSearch': 'Pencarian',
+    'navCart': 'Keranjang',
+    'navProfile': 'Profil',
   };
 
   static String get(Locale locale, String key) {
