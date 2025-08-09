@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 class Product {
   final String id;
   final String name;
@@ -15,13 +17,24 @@ class Product {
     required this.price,
   });
 
-  // Factory method untuk membuat instance Product dari data Firestore
-  factory Product.fromFirestore(Map<String, dynamic> data, String documentId) {
+  factory Product.fromFirestore(
+      Map<String, dynamic> data, String documentId, Locale locale) {
+    final langCode = locale.languageCode; // 'en' atau 'id'
+
+    final translations = data['translations'] as Map<String, dynamic>? ?? {};
+
+    // Ambil data terjemahan sesuai langCode.
+    // Jika tidak ada, gunakan 'en' sebagai fallback.
+    // Jika 'en' juga tidak ada, gunakan map kosong.
+    final localizedData = translations[langCode] as Map<String, dynamic>? ??
+        translations['en'] as Map<String, dynamic>? ??
+        {};
+
     return Product(
       id: documentId,
-      name: data['name'] ?? '',
-      description: data['description'] ?? '',
-      category: data['category'] ?? '',
+      name: localizedData['name'] ?? '',
+      description: localizedData['description'] ?? '',
+      category: localizedData['category'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
       price: data['price'] ?? 0,
     );

@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:async'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
 
                 final products = snapshot.data!.docs.map((doc) {
                   final data = doc.data() as Map<String, dynamic>;
-                  return Product.fromFirestore(data, doc.id);
+                  return Product.fromFirestore(data, doc.id, locale);
                 }).toList();
 
                 return SliverPadding(
