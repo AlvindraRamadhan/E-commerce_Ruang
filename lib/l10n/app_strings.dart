@@ -73,6 +73,12 @@ class AppStrings {
     'total': 'Total:',
     'checkout': 'Proceed to Checkout',
     'checkoutFeatureMessage': 'Checkout feature is under development.',
+
+    // Chat Screen
+    'chatTitle': 'RUANG Virtual Assistant',
+    'chatHint': 'Ask about furniture...',
+    'chatPlaceholder':
+        'Sorry, the RUANG Virtual Assistant is currently under development and will be available soon!',
   };
 
   static const Map<String, String> _id = {
@@ -147,6 +153,12 @@ class AppStrings {
     'total': 'Total:',
     'checkout': 'Lanjut ke Pembayaran',
     'checkoutFeatureMessage': 'Fitur checkout sedang dalam pengembangan.',
+
+    // Chat Screen
+    'chatTitle': 'Asisten Virtual RUANG',
+    'chatHint': 'Tanyakan tentang furnitur...',
+    'chatPlaceholder':
+        'Mohon maaf, Asisten Virtual RUANG sedang dalam tahap pengembangan dan akan segera hadir!',
   };
 
   static String get(Locale locale, String key) {

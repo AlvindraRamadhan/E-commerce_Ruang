@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:ruang/l10n/app_strings.dart';
+import 'package:ruang/presentation/providers/locale_provider.dart';
 import 'dart:async';
 
 class ChatScreen extends StatefulWidget {
@@ -26,11 +29,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
     await Future.delayed(const Duration(milliseconds: 1500));
 
+    // FIX: Tambahkan pengecekan 'mounted' setelah proses async
+    if (!mounted) return;
+
+    final locale = context.read<LocaleProvider>().locale;
+
     setState(() {
       _messages.insert(0, {
         "role": "gemini",
-        "content":
-            "Mohon maaf, Asisten Virtual RUANG sedang dalam tahap pengembangan dan akan segera hadir!",
+        "content": AppStrings.get(locale, 'chatPlaceholder'),
         "isPlaceholder": true
       });
       _isLoading = false;
@@ -39,8 +46,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LocaleProvider>().locale;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Asisten Virtual RUANG')),
+      appBar: AppBar(title: Text(AppStrings.get(locale, 'chatTitle'))),
       body: Column(
         children: [
           Expanded(
@@ -108,7 +117,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: TextField(
                     controller: _controller,
                     decoration: InputDecoration(
-                      hintText: 'Tanyakan tentang furnitur...',
+                      hintText: AppStrings.get(locale, 'chatHint'),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
