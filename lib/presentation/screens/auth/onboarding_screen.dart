@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:ruang/presentation/screens/auth/language_selection_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:ruang/l10n/app_strings.dart';
+import 'package:ruang/presentation/providers/locale_provider.dart';
+import 'package:ruang/presentation/screens/auth/auth_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -16,25 +19,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<Map<String, String>> introData = [
     {
       "animation": "assets/images/intro1.json",
-      "title": "Temukan Estetika Anda",
-      "description":
-          "Jelajahi koleksi furnitur dan dekorasi yang dikurasi khusus untuk gaya unik Anda.",
+      "titleKey": "onboarding1Title",
+      "descriptionKey": "onboarding1Desc",
     },
     {
       "animation": "assets/images/intro2.json",
-      "title": "Kualitas Terjamin",
-      "description":
-          "Setiap produk dipilih berdasarkan kualitas bahan dan pengerjaan terbaik.",
+      "titleKey": "onboarding2Title",
+      "descriptionKey": "onboarding2Desc",
     },
     {
       "animation": "assets/images/intro3.json",
-      "title": "Wujudkan Ruang Impian",
-      "description":
-          "Mulai bangun dan hias ruang yang benar-benar terasa seperti rumah.",
+      "titleKey": "onboarding3Title",
+      "descriptionKey": "onboarding3Desc",
     },
   ];
+
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LocaleProvider>().locale;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -49,8 +52,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             itemBuilder: (context, index) {
               return OnboardingPageContent(
                 animationPath: introData[index]['animation']!,
-                title: introData[index]['title']!,
-                description: introData[index]['description']!,
+                titleKey: introData[index]['titleKey']!,
+                descriptionKey: introData[index]['descriptionKey']!,
               );
             },
           ),
@@ -60,11 +63,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
-                  onPressed: () {
-                    _controller.jumpToPage(introData.length - 1);
-                  },
+                  onPressed: () => _controller.jumpToPage(introData.length - 1),
                   child: Text(
-                    'SKIP',
+                    AppStrings.get(locale, 'skip'),
                     style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
                 ),
@@ -79,18 +80,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onLastPage
                     ? TextButton(
                         onPressed: () {
-                          // --- PERBAIKAN UTAMA DI SINI ---
-                          // Arahkan ke LanguageSelectionScreen
+                          // --- TUJUAN BARU ---
+                          // Arahkan ke AuthPage
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  const LanguageSelectionScreen(),
+                              builder: (context) => const AuthPage(),
                             ),
                           );
                         },
                         child: Text(
-                          'DONE',
+                          AppStrings.get(locale, 'done'),
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                           ),
@@ -104,7 +104,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           );
                         },
                         child: Text(
-                          'NEXT',
+                          AppStrings.get(locale, 'next'),
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                           ),
@@ -121,18 +121,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
 class OnboardingPageContent extends StatelessWidget {
   final String animationPath;
-  final String title;
-  final String description;
+  final String titleKey;
+  final String descriptionKey;
 
   const OnboardingPageContent({
     super.key,
     required this.animationPath,
-    required this.title,
-    required this.description,
+    required this.titleKey,
+    required this.descriptionKey,
   });
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LocaleProvider>().locale;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40.0),
       child: Column(
@@ -141,13 +143,13 @@ class OnboardingPageContent extends StatelessWidget {
           Lottie.asset(animationPath, height: 300),
           const SizedBox(height: 48),
           Text(
-            title,
+            AppStrings.get(locale, titleKey),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 16),
           Text(
-            description,
+            AppStrings.get(locale, descriptionKey),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge,
           ),

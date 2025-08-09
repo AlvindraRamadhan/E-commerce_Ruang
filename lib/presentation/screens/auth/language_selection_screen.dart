@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ruang/l10n/app_strings.dart';
 import 'package:ruang/presentation/providers/locale_provider.dart';
-import 'package:ruang/presentation/screens/auth/auth_page.dart'; 
+import 'package:ruang/presentation/screens/auth/onboarding_screen.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
@@ -14,7 +14,7 @@ class LanguageSelectionScreen extends StatefulWidget {
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
-  String? _selectedLanguage; // 'en' or 'id'
+  String? _selectedLanguage; 
   bool _termsAccepted = false;
 
   void _selectLanguage(String languageCode) {
@@ -61,7 +61,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               ),
               const SizedBox(height: 16),
               LanguageButton(
-                label: 'Bahasa',
+                label: 'Indonesia',
                 isSelected: _selectedLanguage == 'id',
                 onTap: () => _selectLanguage('id'),
               ),
@@ -114,12 +114,12 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                             Provider.of<LocaleProvider>(context, listen: false);
                         provider.setLocale(Locale(_selectedLanguage!));
 
-                        // --- PERUBAHAN UTAMA DI SINI ---
-                        // Selalu arahkan ke AuthPage setelah memilih bahasa
+                        // --- TUJUAN BARU ---
+                        // Arahkan ke OnboardingScreen
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const AuthPage()),
+                              builder: (context) => const OnboardingScreen()),
                         );
                       }
                     : null,
@@ -133,7 +133,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   }
 }
 
-// Widget LanguageButton tetap sama
 class LanguageButton extends StatelessWidget {
   final String label;
   final bool isSelected;
