@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:ruang/l10n/app_strings.dart';
 import 'package:ruang/presentation/providers/locale_provider.dart';
 import 'package:ruang/presentation/screens/auth/onboarding_screen.dart';
+import 'package:ruang/l10n/policy_content.dart';
+import 'package:ruang/presentation/screens/auth/policy_page.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
@@ -14,14 +16,15 @@ class LanguageSelectionScreen extends StatefulWidget {
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
-  String? _selectedLanguage; 
+  String? _selectedLanguage;
   bool _termsAccepted = false;
 
   void _selectLanguage(String languageCode) {
     setState(() {
       _selectedLanguage = languageCode;
     });
-    context.read<LocaleProvider>().setLocale(Locale(languageCode));
+    // Kita tidak langsung set locale di provider di sini
+    // Locale akan di-set saat tombol "Get Started" ditekan
   }
 
   void _setTermsAccepted(bool? value) {
@@ -34,7 +37,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final locale = context.watch<LocaleProvider>().locale;
+    final localeProvider = context.watch<LocaleProvider>();
+    final currentLocale = _selectedLanguage == null
+        ? localeProvider.locale
+        : Locale(_selectedLanguage!);
 
     return Scaffold(
       body: SafeArea(
@@ -46,7 +52,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               Image.asset('assets/images/logo RUANG.png', height: 100),
               const SizedBox(height: 48),
               Text(
-                AppStrings.get(locale, 'chooseLanguage'),
+                AppStrings.get(currentLocale, 'chooseLanguage'),
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
@@ -84,21 +90,50 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                         style: Theme.of(context).textTheme.bodyMedium,
                         children: [
                           TextSpan(
-                              text: '${AppStrings.get(locale, 'agreeTo')} '),
+                              text: '${AppStrings.get(currentLocale, 'agreeTo')} '),
                           TextSpan(
-                            text: AppStrings.get(locale, 'termsAndConditions'),
+                            text: AppStrings.get(
+                                currentLocale, 'termsAndConditions'),
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline),
-                            recognizer: TapGestureRecognizer()..onTap = () {},
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PolicyPage(
+                                      title: PolicyContent.get(
+                                          currentLocale, 'termsTitle'),
+                                      content: PolicyContent.get(
+                                          currentLocale, 'termsContent'),
+                                    ),
+                                  ),
+                                );
+                              },
                           ),
-                          TextSpan(text: ' ${AppStrings.get(locale, 'and')} '),
                           TextSpan(
-                            text: AppStrings.get(locale, 'privacyPolicy'),
+                              text: ' ${AppStrings.get(currentLocale, 'and')} '),
+                          TextSpan(
+                            text:
+                                AppStrings.get(currentLocale, 'privacyPolicy'),
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline),
-                            recognizer: TapGestureRecognizer()..onTap = () {},
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PolicyPage(
+                                      title: PolicyContent.get(
+                                          currentLocale, 'privacyTitle'),
+                                      content: PolicyContent.get(
+                                          currentLocale, 'privacyContent'),
+                                    ),
+                                  ),
+                                );
+                              },
                           ),
                         ],
                       ),
@@ -110,12 +145,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
-                        final provider =
-                            Provider.of<LocaleProvider>(context, listen: false);
-                        provider.setLocale(Locale(_selectedLanguage!));
-
-                        // --- TUJUAN BARU ---
-                        // Arahkan ke OnboardingScreen
+                        // Di sini kita finalisasi pilihan bahasa
+                        localeProvider.setLocale(Locale(_selectedLanguage!));
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -123,7 +154,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                         );
                       }
                     : null,
-                child: Text(AppStrings.get(locale, 'getStarted')),
+                child: Text(AppStrings.get(currentLocale, 'getStarted')),
               ),
             ],
           ),

@@ -93,6 +93,10 @@ class AppStrings {
     'loggedInAs': 'Logged in as:',
     'noUser': 'No user',
     'otherFeaturesInProgress': 'Other Features are Under Development',
+
+    // Policy Page
+    'policySearchHint': 'Search keyword...',
+    'policyNoResults': 'No results found.',
   };
 
   static const Map<String, String> _id = {
@@ -187,6 +191,10 @@ class AppStrings {
     'loggedInAs': 'Login sebagai:',
     'noUser': 'Tidak ada user',
     'otherFeaturesInProgress': 'Fitur Lainnya Sedang Dikembangkan',
+
+    // Policy Page
+    'policySearchHint': 'Cari kata kunci...',
+    'policyNoResults': 'Tidak ada hasil ditemukan.',
   };
 
   static String get(Locale locale, String key) {
