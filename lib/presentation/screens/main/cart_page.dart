@@ -6,6 +6,7 @@ import 'package:ruang/l10n/app_strings.dart';
 import 'package:ruang/presentation/providers/cart_provider.dart';
 import 'package:ruang/presentation/providers/locale_provider.dart';
 import 'package:ruang/presentation/screens/main/product_detail_page.dart';
+import 'package:ruang/presentation/screens/main/shipping_address_page.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -125,12 +126,10 @@ class CartPage extends StatelessWidget {
                     child: ElevatedButton(
                       child: Text(AppStrings.get(locale, 'checkout')),
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(AppStrings.get(
-                                locale, 'checkoutFeatureMessage')),
-                          ),
-                        );
+                        // PERUBAHAN: Mengarahkan ke halaman alamat pengiriman
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const ShippingAddressPage(),
+                        ));
                       },
                     ),
                   ),
