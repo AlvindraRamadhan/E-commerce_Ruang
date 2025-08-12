@@ -52,12 +52,12 @@ class ContactUsPage extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.call_outlined),
                 title: Text(AppStrings.get(locale, 'contactCall')),
-                subtitle: const Text('(+62) 812-3456-7890'),
+                subtitle: const Text('(+62) 5198109885'),
               ),
               ListTile(
                 leading: const Icon(Icons.alternate_email_outlined),
                 title: Text(AppStrings.get(locale, 'contactEmail')),
-                subtitle: const Text('support@ruangapp.com'),
+                subtitle: const Text('alvindraramadhan1210@gmail.com'),
               ),
               const SizedBox(height: 24),
               const Divider(),
