@@ -6,6 +6,7 @@ import 'package:ruang/data/models/address_model.dart';
 import 'package:ruang/l10n/app_strings.dart';
 import 'package:ruang/presentation/providers/locale_provider.dart';
 import 'package:ruang/presentation/screens/main/add_address_page.dart';
+import 'package:ruang/presentation/screens/main/checkout_summary_page.dart';
 
 class ShippingAddressPage extends StatefulWidget {
   const ShippingAddressPage({super.key});
@@ -45,11 +46,9 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
           StreamBuilder<List<Address>>(
             stream: _getAddressesStream(),
             builder: (context, snapshot) {
-              // PERBAIKAN: Logika diubah agar loading hanya muncul saat data belum ada sama sekali
               if (snapshot.hasData) {
                 final addresses = snapshot.data!;
                 if (addresses.isEmpty) {
-                  // Tampilan jika tidak ada alamat
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -70,7 +69,6 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                   );
                 }
 
-                // Tampilan jika ada alamat
                 return Column(
                   children: [
                     Expanded(
@@ -109,11 +107,13 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                           onPressed: _selectedAddressId == null
                               ? null
                               : () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            '${AppStrings.get(locale, 'continueToSummaryWith')} $_selectedAddressId')),
-                                  );
+                                  final selectedAddressObject =
+                                      addresses.firstWhere((addr) =>
+                                          addr.id == _selectedAddressId);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => CheckoutSummaryPage(
+                                        selectedAddress: selectedAddressObject),
+                                  ));
                                 },
                           child: Text(AppStrings.get(
                               locale, 'continueToSummaryButton')),
@@ -124,7 +124,6 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                 );
               }
 
-              // Tampilan saat loading awal atau jika ada error
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }

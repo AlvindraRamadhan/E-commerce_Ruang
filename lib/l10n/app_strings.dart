@@ -93,11 +93,11 @@ class AppStrings {
     'loggedInAs': 'Logged in as:',
     'noUser': 'No user',
     'otherFeaturesInProgress': 'Other Features are Under Development',
-    
+
     // Policy Page
     'policySearchHint': 'Search keyword...',
     'policyNoResults': 'No results found.',
-    
+
     // Help & FAQ Section
     'needHelp': 'Need help? Visit',
     'faq': 'our FAQs',
@@ -106,25 +106,44 @@ class AppStrings {
     'contactTitle': 'Contact Us',
     'faqTopic': 'Select a topic:',
     'faqQ1': 'How do I create an account?',
-    'faqA1': 'You can create an account by clicking "Register now" on the login page and filling in your email and password.',
+    'faqA1':
+        'You can create an account by clicking "Register now" on the login page and filling in your email and password.',
     'faqQ2': 'How do I track my order?',
-    'faqA2': 'The order tracking feature will be available on the Profile page in a future update. Stay tuned!',
+    'faqA2':
+        'The order tracking feature will be available on the Profile page in a future update. Stay tuned!',
     'faqQ3': 'What payment methods are accepted?',
-    'faqA3': 'We will support payments via Virtual Account, Credit/Debit Card, and E-wallet through Midtrans/Xendit integration in the next phase.',
+    'faqA3':
+        'We will support payments via Virtual Account, Credit/Debit Card, and E-wallet through Midtrans/Xendit integration in the next phase.',
     'faqQ4': 'Is international shipping available?',
-    'faqA4': 'Currently, we only serve shipping within Indonesia. International shipping options may be considered in the future.',
+    'faqA4':
+        'Currently, we only serve shipping within Indonesia. International shipping options may be considered in the future.',
     'faqQ5': 'Are the product colors shown accurate?',
-    'faqA5': 'We strive to display colors as accurately as possible. However, due to screen calibration differences, the actual product color may vary slightly.',
+    'faqA5':
+        'We strive to display colors as accurately as possible. However, due to screen calibration differences, the actual product color may vary slightly.',
     'faqQ6': 'Can I change or cancel my order after it has been placed?',
-    'faqA6': 'Unfortunately, orders that have been processed cannot be changed or canceled. Please double-check your cart before proceeding to checkout.',
+    'faqA6':
+        'Unfortunately, orders that have been processed cannot be changed or canceled. Please double-check your cart before proceeding to checkout.',
     'faqQ7': 'What is your return policy?',
-    'faqA7': 'Products can be returned within 7 days of receipt if they are defective or do not match the description. Please contact our customer service to initiate the return process.',
+    'faqA7':
+        'Products can be returned within 7 days of receipt if they are defective or do not match the description. Please contact our customer service to initiate the return process.',
     'faqQ8': 'I forgot my password. What should I do?',
-    'faqA8': 'A "Forgot Password" feature will be added to the login page in a future update, allowing you to reset your password via email.',
-    'contactIntro': 'If you have any questions, we are ready to help. Contact the RUANG team via one of the channels below.',
+    'faqA8':
+        'A "Forgot Password" feature will be added to the login page in a future update, allowing you to reset your password via email.',
+    'contactIntro':
+        'If you have any questions, we are ready to help. Contact the RUANG team via one of the channels below.',
     'contactCall': 'RUANG Call Center',
     'contactEmail': 'RUANG Customer Service Email',
     'connectWithDev': 'Connect with the Developer',
+
+    // Checkout Summary Page
+    'summaryTitle': 'Order Summary',
+    'shippingAddressHeader': 'Shipping Address',
+    'orderItemsHeader': 'Order Items',
+    'priceDetailsHeader': 'Payment Details',
+    'subtotal': 'Subtotal',
+    'shippingCost': 'Shipping Cost',
+    'totalPayment': 'Total Payment',
+    'proceedToPaymentButton': 'Proceed to Payment',
 
     // Address Pages
     'addAddressTitle': 'Add New Address',
@@ -250,26 +269,45 @@ class AppStrings {
     'contactTitle': 'Hubungi Kami',
     'faqTopic': 'Pilih topik:',
     'faqQ1': 'Bagaimana cara membuat akun?',
-    'faqA1': 'Anda dapat membuat akun dengan menekan tombol "Daftar sekarang" pada halaman login dan mengisi email serta password Anda.',
+    'faqA1':
+        'Anda dapat membuat akun dengan menekan tombol "Daftar sekarang" pada halaman login dan mengisi email serta password Anda.',
     'faqQ2': 'Bagaimana cara melacak pesanan saya?',
-    'faqA2': 'Fitur pelacakan pesanan akan tersedia pada halaman Profil di pembaruan selanjutnya. Nantikan!',
+    'faqA2':
+        'Fitur pelacakan pesanan akan tersedia pada halaman Profil di pembaruan selanjutnya. Nantikan!',
     'faqQ3': 'Metode pembayaran apa saja yang diterima?',
-    'faqA3': 'Kami akan mendukung pembayaran via Virtual Account, Kartu Kredit/Debit, dan E-wallet melalui integrasi Midtrans/Xendit pada fase berikutnya.',
+    'faqA3':
+        'Kami akan mendukung pembayaran via Virtual Account, Kartu Kredit/Debit, dan E-wallet melalui integrasi Midtrans/Xendit pada fase berikutnya.',
     'faqQ4': 'Apakah tersedia pengiriman internasional?',
-    'faqA4': 'Saat ini kami hanya melayani pengiriman di dalam wilayah Indonesia. Opsi pengiriman internasional mungkin akan dipertimbangkan di masa depan.',
+    'faqA4':
+        'Saat ini kami hanya melayani pengiriman di dalam wilayah Indonesia. Opsi pengiriman internasional mungkin akan dipertimbangkan di masa depan.',
     'faqQ5': 'Apakah warna produk yang ditampilkan akurat?',
-    'faqA5': 'Kami berusaha menampilkan warna seakurat mungkin. Namun, karena perbedaan kalibrasi layar, warna produk asli mungkin sedikit berbeda.',
+    'faqA5':
+        'Kami berusaha menampilkan warna seakurat mungkin. Namun, karena perbedaan kalibrasi layar, warna produk asli mungkin sedikit berbeda.',
     'faqQ6': 'Bisakah saya mengubah atau membatalkan pesanan saya?',
-    'faqA6': 'Mohon maaf, pesanan yang sudah diproses tidak dapat diubah atau dibatalkan. Mohon periksa kembali keranjang Anda sebelum melanjutkan ke pembayaran.',
+    'faqA6':
+        'Mohon maaf, pesanan yang sudah diproses tidak dapat diubah atau dibatalkan. Mohon periksa kembali keranjang Anda sebelum melanjutkan ke pembayaran.',
     'faqQ7': 'Bagaimana kebijakan pengembalian barang?',
-    'faqA7': 'Produk dapat dikembalikan dalam waktu 7 hari setelah diterima jika terdapat cacat atau tidak sesuai deskripsi. Silakan hubungi customer service kami untuk memulai proses pengembalian.',
+    'faqA7':
+        'Produk dapat dikembalikan dalam waktu 7 hari setelah diterima jika terdapat cacat atau tidak sesuai deskripsi. Silakan hubungi customer service kami untuk memulai proses pengembalian.',
     'faqQ8': 'Saya lupa password. Apa yang harus saya lakukan?',
-    'faqA8': 'Fitur "Lupa Password" akan ditambahkan pada halaman login di pembaruan selanjutnya, memungkinkan Anda untuk mereset password melalui email.',
-    'contactIntro': 'Jika terdapat pertanyaan, kami siap membantu. Hubungi tim RUANG melalui salah satu kanal di bawah ini.',
+    'faqA8':
+        'Fitur "Lupa Password" akan ditambahkan pada halaman login di pembaruan selanjutnya, memungkinkan Anda untuk mereset password melalui email.',
+    'contactIntro':
+        'Jika terdapat pertanyaan, kami siap membantu. Hubungi tim RUANG melalui salah satu kanal di bawah ini.',
     'contactCall': 'RUANG Call Center',
     'contactEmail': 'Email Customer Service RUANG',
     'connectWithDev': 'Terhubung dengan Developer',
-        
+
+    // Checkout Summary Page
+    'summaryTitle': 'Ringkasan Pesanan',
+    'shippingAddressHeader': 'Alamat Pengiriman',
+    'orderItemsHeader': 'Detail Pesanan',
+    'priceDetailsHeader': 'Rincian Pembayaran',
+    'subtotal': 'Subtotal',
+    'shippingCost': 'Ongkos Kirim',
+    'totalPayment': 'Total Pembayaran',
+    'proceedToPaymentButton': 'Lanjutkan ke Pembayaran',
+
     // Address Pages
     'addAddressTitle': 'Tambah Alamat Baru',
     'fullNameLabel': 'Nama Lengkap',
