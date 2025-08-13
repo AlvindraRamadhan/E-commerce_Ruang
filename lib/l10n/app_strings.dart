@@ -145,6 +145,12 @@ class AppStrings {
     'totalPayment': 'Total Payment',
     'proceedToPaymentButton': 'Proceed to Payment',
 
+    // Order Success Page
+    'orderSuccessTitle': 'Payment Successful!',
+    'orderSuccessMessage':
+        'Your order has been successfully placed. We will process it immediately.',
+    'backToHomeButton': 'Back to Home',
+
     // Address Pages
     'addAddressTitle': 'Add New Address',
     'fullNameLabel': 'Full Name',
@@ -307,6 +313,12 @@ class AppStrings {
     'shippingCost': 'Ongkos Kirim',
     'totalPayment': 'Total Pembayaran',
     'proceedToPaymentButton': 'Lanjutkan ke Pembayaran',
+
+    // Order Success Page
+    'orderSuccessTitle': 'Pembayaran Berhasil!',
+    'orderSuccessMessage':
+        'Pesanan Anda telah berhasil dibuat. Kami akan segera memprosesnya.',
+    'backToHomeButton': 'Kembali ke Beranda',
 
     // Address Pages
     'addAddressTitle': 'Tambah Alamat Baru',

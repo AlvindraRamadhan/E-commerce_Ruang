@@ -206,6 +206,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.5.2"
+  flutter_dotenv:
+    dependency: "direct main"
+    description:
+      name: flutter_dotenv
+      sha256: b7c7be5cd9f6ef7a78429cabd2774d3c4af50e79cb2b7593e3d5d763ef95c61b
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -325,6 +333,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.20.2"
+  js:
+    dependency: "direct main"
+    description:
+      name: js
+      sha256: "53385261521cc4a0c4658fd0ad07a7d14591cf8fc33abbceae306ddb974888dc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.2"
   leak_tracker:
     dependency: transitive
     description:
@@ -389,6 +405,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.16.0"
+  midtrans_sdk:
+    dependency: "direct main"
+    description:
+      name: midtrans_sdk
+      sha256: dcf78cce4c79d5d3dfbf2e97da99e87953dd5ef74cff184905e951ff3753294c
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   mime:
     dependency: transitive
     description:

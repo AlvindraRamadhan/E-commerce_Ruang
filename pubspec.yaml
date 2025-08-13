@@ -35,6 +35,9 @@ dependencies:
   shared_preferences: ^2.2.3
   share_plus: ^10.0.0
   url_launcher: ^6.3.2
+  midtrans_sdk: ^1.0.1
+  flutter_dotenv: ^5.2.1
+  js: ^0.7.2
 
 dev_dependencies:
   flutter_test:
@@ -53,3 +56,5 @@ flutter:
     - assets/images/error_animation.json
     - assets/images/loading_animation.json
     - assets/images/failed.json
+    - .env
+ 

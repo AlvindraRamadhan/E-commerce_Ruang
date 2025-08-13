@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ruang/presentation/providers/cart_provider.dart';
@@ -8,8 +9,16 @@ import 'package:ruang/presentation/screens/auth/splash_screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+class L10n {
+  static final all = [
+    const Locale('en'),
+    const Locale('id'),
+  ];
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env"); 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
@@ -33,16 +42,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'RUANG | Premium Furniture & Decor',
       debugShowCheckedModeBanner: false,
-
       locale: localeProvider.locale,
       supportedLocales: L10n.all,
-      // PERBAIKAN: Kata kunci 'const' dihapus dari list
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xFFF8F8F8),
         colorScheme: ColorScheme.fromSeed(

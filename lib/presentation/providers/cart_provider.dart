@@ -44,4 +44,10 @@ class CartProvider extends ChangeNotifier {
     _items.removeWhere((item) => item.product.id == productId);
     notifyListeners();
   }
+  
+  // PERUBAHAN: Menambahkan method untuk mengosongkan keranjang
+  void clearCart() {
+    _items.clear();
+    notifyListeners();
+  }
 }
