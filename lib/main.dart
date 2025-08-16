@@ -1,6 +1,8 @@
+// Lokasi: lib/main.dart
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart'; 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ruang/presentation/providers/cart_provider.dart';
@@ -9,81 +11,89 @@ import 'package:ruang/presentation/screens/auth/splash_screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-class L10n {
-  static final all = [
-    const Locale('en'),
-    const Locale('id'),
-  ];
-}
-
-void main() async {
+// Fungsi 'main' sebagai pintu masuk aplikasi
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env"); 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()..loadLocale()),
       ],
-      child: const MyApp(),
+      child: const RuangApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// Ini adalah kelas utama (root widget) dari aplikasi Anda
+class RuangApp extends StatelessWidget {
+  const RuangApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final localeProvider = Provider.of<LocaleProvider>(context);
-    final textTheme = Theme.of(context).textTheme;
+    return Consumer<LocaleProvider>(
+      builder: (context, localeProvider, child) {
+        final textTheme = Theme.of(context).textTheme;
 
-    return MaterialApp(
-      title: 'RUANG | Premium Furniture & Decor',
-      debugShowCheckedModeBanner: false,
-      locale: localeProvider.locale,
-      supportedLocales: L10n.all,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFF8F8F8),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0A4F33),
-          primary: const Color(0xFF0A4F33),
-          surface: const Color(0xFFF8F8F8),
-        ),
-        useMaterial3: true,
-        textTheme: GoogleFonts.interTextTheme(textTheme).copyWith(
-          displayLarge:
-              GoogleFonts.playfairDisplayTextTheme(textTheme).displayLarge,
-          displayMedium:
-              GoogleFonts.playfairDisplayTextTheme(textTheme).displayMedium,
-          displaySmall:
-              GoogleFonts.playfairDisplayTextTheme(textTheme).displaySmall,
-          headlineMedium:
-              GoogleFonts.playfairDisplayTextTheme(textTheme).headlineMedium,
-          headlineSmall:
-              GoogleFonts.playfairDisplayTextTheme(textTheme).headlineSmall,
-          titleLarge:
-              GoogleFonts.playfairDisplayTextTheme(textTheme).titleLarge,
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF0A4F33),
-            foregroundColor: Colors.white,
-            textStyle: GoogleFonts.inter(fontWeight: FontWeight.bold),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+        return MaterialApp(
+          title: 'RUANG | Premium Furniture & Decor',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            scaffoldBackgroundColor: const Color(0xFFF8F8F8),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF0A4F33),
+              primary: const Color(0xFF0A4F33),
+              surface: const Color(0xFFF8F8F8),
             ),
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            useMaterial3: true,
+            textTheme: GoogleFonts.interTextTheme(textTheme).copyWith(
+              displayLarge:
+                  GoogleFonts.playfairDisplayTextTheme(textTheme).displayLarge,
+              displayMedium:
+                  GoogleFonts.playfairDisplayTextTheme(textTheme).displayMedium,
+              displaySmall:
+                  GoogleFonts.playfairDisplayTextTheme(textTheme).displaySmall,
+              headlineMedium: GoogleFonts.playfairDisplayTextTheme(textTheme)
+                  .headlineMedium,
+              headlineSmall:
+                  GoogleFonts.playfairDisplayTextTheme(textTheme).headlineSmall,
+              titleLarge:
+                  GoogleFonts.playfairDisplayTextTheme(textTheme).titleLarge,
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF0A4F33),
+                foregroundColor: Colors.white,
+                textStyle: GoogleFonts.inter(fontWeight: FontWeight.bold),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              ),
+            ),
           ),
-        ),
-      ),
-      home: const SplashScreen(),
+
+          locale: localeProvider.locale,
+          supportedLocales: const [
+            Locale('en', ''), // English
+            Locale('id', ''), // Indonesian
+          ],
+
+          // 📚 DAFTARKAN "KAMUS" DI SINI
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+
+          home: const SplashScreen(),
+        );
+      },
     );
   }
 }
