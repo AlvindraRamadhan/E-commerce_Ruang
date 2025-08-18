@@ -1,5 +1,3 @@
-// Lokasi: lib/l10n/app_strings.dart
-
 import 'package:flutter/widgets.dart';
 
 class AppStrings {

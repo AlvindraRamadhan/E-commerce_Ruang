@@ -1,5 +1,3 @@
-// Lokasi: presentation/screens/main/search_page.dart
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -162,14 +160,12 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
           StreamBuilder<QuerySnapshot>(
-            // PERBAIKAN: Parameter 'locale' yang salah telah dihapus
             stream: ProductService.searchProductsStream(
               categories:
                   _selectedCategories.isNotEmpty ? _selectedCategories : null,
             ),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                // Kode print() untuk diagnosis sudah dihapus
                 return const SliverFillRemaining(
                     child: Center(child: Text("Terjadi kesalahan")));
               }
