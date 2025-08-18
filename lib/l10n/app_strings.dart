@@ -1,3 +1,5 @@
+// Lokasi: lib/l10n/app_strings.dart
+
 import 'package:flutter/widgets.dart';
 
 class AppStrings {
@@ -48,6 +50,7 @@ class AppStrings {
     'searchHint': 'Search for your dream furniture...',
     'exploreCategories': 'Explore Categories',
     'allProducts': 'All Products',
+    'categoryAll': 'All', // Tambahan
     'categoryChair': 'Chair',
     'categoryTable': 'Table',
     'categoryLamp': 'Lamp',
@@ -168,6 +171,12 @@ class AppStrings {
     'addNewAddressButton': 'Add New Address',
     'continueToSummaryButton': 'Continue to Order Summary',
     'continueToSummaryWith': 'Continue to Summary with address ID:',
+
+    // Search Page (Tambahan Baru)
+    'searchCategories': 'Categories',
+    'searchPriceRange': 'Price Range',
+    'searchResetFilter': 'Reset All Filters',
+    'searchNoResults': 'Oops! No products found for your criteria.',
   };
 
   static const Map<String, String> _id = {
@@ -217,6 +226,7 @@ class AppStrings {
     'searchHint': 'Cari furnitur impianmu...',
     'exploreCategories': 'Jelajahi Kategori',
     'allProducts': 'Semua Produk',
+    'categoryAll': 'Semua', // Tambahan
     'categoryChair': 'Kursi',
     'categoryTable': 'Meja',
     'categoryLamp': 'Lampu',
@@ -337,6 +347,12 @@ class AppStrings {
     'addNewAddressButton': 'Tambah Alamat Baru',
     'continueToSummaryButton': 'Lanjutkan ke Ringkasan Pesanan',
     'continueToSummaryWith': 'Lanjut ke Ringkasan dengan alamat ID:',
+
+    // Search Page (Tambahan Baru)
+    'searchCategories': 'Kategori',
+    'searchPriceRange': 'Rentang Harga',
+    'searchResetFilter': 'Hapus Semua Filter',
+    'searchNoResults': 'Oops! Produk yang kamu cari tidak ditemukan.',
   };
 
   static String get(Locale locale, String key) {

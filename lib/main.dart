@@ -1,5 +1,3 @@
-// Lokasi: lib/main.dart
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,11 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ruang/presentation/providers/cart_provider.dart';
 import 'package:ruang/presentation/providers/locale_provider.dart';
+import 'package:ruang/presentation/providers/main_screen_provider.dart';
 import 'package:ruang/presentation/screens/auth/splash_screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-// Fungsi 'main' sebagai pintu masuk aplikasi
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
@@ -21,6 +19,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => MainScreenProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()..loadLocale()),
       ],
@@ -29,7 +28,6 @@ Future<void> main() async {
   );
 }
 
-// Ini adalah kelas utama (root widget) dari aplikasi Anda
 class RuangApp extends StatelessWidget {
   const RuangApp({super.key});
 
@@ -48,6 +46,8 @@ class RuangApp extends StatelessWidget {
               seedColor: const Color(0xFF0A4F33),
               primary: const Color(0xFF0A4F33),
               surface: const Color(0xFFF8F8F8),
+              surfaceContainerHighest: Colors.grey[200]!, 
+              onSurface: Colors.black87,
             ),
             useMaterial3: true,
             textTheme: GoogleFonts.interTextTheme(textTheme).copyWith(
@@ -57,8 +57,8 @@ class RuangApp extends StatelessWidget {
                   GoogleFonts.playfairDisplayTextTheme(textTheme).displayMedium,
               displaySmall:
                   GoogleFonts.playfairDisplayTextTheme(textTheme).displaySmall,
-              headlineMedium: GoogleFonts.playfairDisplayTextTheme(textTheme)
-                  .headlineMedium,
+              headlineMedium:
+                  GoogleFonts.playfairDisplayTextTheme(textTheme).headlineMedium,
               headlineSmall:
                   GoogleFonts.playfairDisplayTextTheme(textTheme).headlineSmall,
               titleLarge:
@@ -77,20 +77,16 @@ class RuangApp extends StatelessWidget {
               ),
             ),
           ),
-
           locale: localeProvider.locale,
           supportedLocales: const [
             Locale('en', ''), // English
             Locale('id', ''), // Indonesian
           ],
-
-          // 📚 DAFTARKAN "KAMUS" DI SINI
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-
           home: const SplashScreen(),
         );
       },

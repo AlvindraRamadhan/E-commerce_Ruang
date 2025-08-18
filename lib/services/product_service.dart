@@ -1,40 +1,34 @@
-import 'dart:developer';
-import 'package:flutter/material.dart'; // <-- Tambahkan import ini
+// Lokasi: services/product_service.dart
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ruang/data/models/product_model.dart';
 
 class ProductService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
   static final CollectionReference _productCollection =
       _db.collection('products');
 
-  // UBAH DARI String locale MENJADI Locale locale
-  static Future<List<Product>> searchProducts(
-      String query, Locale locale) async {
-    if (query.isEmpty) {
-      return [];
+  /// Mengambil stream produk dengan filter satu kategori.
+  /// Digunakan di HomePage. (Ini sudah benar)
+  static Stream<QuerySnapshot> getProductsStream({String? category}) {
+    Query query = _productCollection;
+    if (category != null && category != 'All') {
+      query = query.where('translations.en.category', isEqualTo: category);
+    }
+    return query.snapshots();
+  }
+
+  /// PERBAIKAN: Ini adalah fungsi yang hilang yang dibutuhkan oleh SearchPage.
+  /// Mengambil stream produk dengan filter multi-kategori.
+  static Stream<QuerySnapshot> searchProductsStream({
+    List<String>? categories,
+  }) {
+    Query query = _productCollection;
+
+    // Filter berdasarkan beberapa kategori, jika dipilih.
+    if (categories != null && categories.isNotEmpty) {
+      query = query.where('translations.en.category', whereIn: categories);
     }
 
-    String capitalizedQuery = query[0].toUpperCase() + query.substring(1);
-
-    try {
-      final snapshot = await _productCollection
-          .where('name.en', isGreaterThanOrEqualTo: capitalizedQuery)
-          .where('name.en', isLessThanOrEqualTo: '$capitalizedQuery\uf8ff')
-          .get();
-
-      if (snapshot.docs.isEmpty) {
-        return [];
-      }
-
-      return snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        // SEKARANG TIPE DATA 'locale' SUDAH BENAR (Locale)
-        return Product.fromFirestore(data, doc.id, locale);
-      }).toList();
-    } catch (e) {
-      log("Error searching products: $e");
-      return [];
-    }
+    return query.snapshots();
   }
 }

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:ruang/l10n/app_strings.dart';
 import 'package:ruang/presentation/providers/cart_provider.dart';
 import 'package:ruang/presentation/providers/locale_provider.dart';
+import 'package:ruang/presentation/providers/main_screen_provider.dart';
 import 'package:ruang/presentation/screens/main/cart_page.dart';
 import 'package:ruang/presentation/screens/main/home_page.dart';
 import 'package:ruang/presentation/screens/main/profile_page.dart';
 import 'package:ruang/presentation/screens/main/search_page.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,23 +17,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
-
-  bool _isInitialLoading = true;
-  bool _isPageSwitching = false;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(milliseconds: 2500), () {
-      if (mounted) {
-        setState(() {
-          _isInitialLoading = false;
-        });
-      }
-    });
-  }
-
   static const List<Widget> _pages = <Widget>[
     HomePage(),
     SearchPage(),
@@ -42,46 +24,22 @@ class _MainScreenState extends State<MainScreen> {
     ProfilePage(),
   ];
 
-  void _onItemTapped(int index) {
-    if (_selectedIndex == index || _isPageSwitching) return;
-    setState(() {
-      _isPageSwitching = true;
-    });
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      if (mounted) {
-        setState(() {
-          _selectedIndex = index;
-          _isPageSwitching = false;
-        });
-      }
-    });
-  }
-
-  Widget _buildBody() {
-    if (_isPageSwitching) {
-      return Center(
-          child:
-              Lottie.asset('assets/images/loading_animation.json', width: 150));
-    }
-    return Skeletonizer(
-      enabled: _isInitialLoading,
-      effect: ShimmerEffect(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.green.shade100,
-      ),
-      child: _pages.elementAt(_selectedIndex),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final mainScreenProvider = context.watch<MainScreenProvider>();
     final locale = context.watch<LocaleProvider>().locale;
 
     return Scaffold(
-      body: _buildBody(),
+      body: PageView(
+        controller: mainScreenProvider.pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: _pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        currentIndex: mainScreenProvider.currentPage,
+        onTap: (index) {
+          context.read<MainScreenProvider>().setPage(index);
+        },
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Colors.grey,
