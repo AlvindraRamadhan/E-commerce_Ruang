@@ -18,21 +18,24 @@ class OrderService {
     }
   }
 
-  static Stream<QuerySnapshot> getOrdersStreamForUser() {
+  static Stream<QuerySnapshot> getOrdersStreamForUser({String? status}) {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      // PERBAIKAN: Menambahkan 'const'
       return const Stream.empty();
     }
 
     try {
-      return _orderCollection
+      Query query = _orderCollection
           .where('userId', isEqualTo: user.uid)
-          .orderBy('orderDate', descending: true)
-          .snapshots();
+          .orderBy('orderDate', descending: true);
+
+      if (status != null) {
+        query = query.where('status', isEqualTo: status);
+      }
+
+      return query.snapshots();
     } catch (e) {
       developer.log("Error getting orders stream for user: $e");
-      // PERBAIKAN: Menambahkan 'const'
       return const Stream.empty();
     }
   }

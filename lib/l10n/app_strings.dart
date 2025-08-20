@@ -1,3 +1,4 @@
+// Lokasi: lib/l10n/app_strings.dart
 import 'package:flutter/widgets.dart';
 
 class AppStrings {
@@ -176,10 +177,35 @@ class AppStrings {
     'searchResetFilter': 'Reset All Filters',
     'searchNoResults': 'Oops! No products found for your criteria.',
 
-    // Profile Page (Fase 6.2)
+    // Profile Page
     'profileOrderHistory': 'Order History',
     'profileNoOrders': 'You have no orders yet.',
     'profileUnnamedUser': 'Unnamed User',
+    'accountSettings': 'My Account',
+    'shippingAddresses': 'Shipping Addresses',
+    'accountSecurity': 'Account Security',
+    'viewAll': 'View All',
+
+    // Order Pages (Fase 6.3)
+    'orderDetailsTitle': 'Order Details',
+    'orderDetailsInfo': 'Order Information',
+    'orderId': 'Order ID',
+    'orderDate': 'Date',
+    'orderStatus': 'Status',
+    'orderShippingAddress': 'Shipping Address',
+    'orderProducts': 'Products Ordered',
+    'orderItemCount': 'item(s)',
+    'orderStatusProcessing': 'Processing',
+    'orderStatusShipped': 'Shipped',
+    'orderStatusCompleted': 'Completed',
+    'stepOrderPlaced': 'Order Placed',
+    'stepOrderPlacedDesc':
+        'Your order has been received and is being processed.',
+    'stepShipped': 'Shipped',
+    'stepShippedDesc': 'Your package is on its way.',
+    'stepCompleted': 'Completed',
+    'stepCompletedDesc': 'The order has arrived at its destination.',
+    'noOrdersWithStatus': 'No orders with this status.',
   };
 
   static const Map<String, String> _id = {
@@ -356,11 +382,34 @@ class AppStrings {
     'searchPriceRange': 'Rentang Harga',
     'searchResetFilter': 'Hapus Semua Filter',
     'searchNoResults': 'Oops! Produk yang kamu cari tidak ditemukan.',
-
-    // Halaman Profil (Fase 6.2)
     'profileOrderHistory': 'Riwayat Pesanan',
     'profileNoOrders': 'Anda belum memiliki pesanan.',
     'profileUnnamedUser': 'Pengguna Tanpa Nama',
+
+    // Halaman Detail Pesanan (Fase 6.3)
+    'orderDetailsTitle': 'Detail Pesanan',
+    'orderDetailsInfo': 'Informasi Pesanan',
+    'orderId': 'ID Pesanan',
+    'orderDate': 'Tanggal',
+    'orderStatus': 'Status',
+    'orderShippingAddress': 'Alamat Pengiriman',
+    'orderProducts': 'Produk Dipesan',
+    'orderItemCount': 'item',
+    'accountSettings': 'Akun Saya',
+    'shippingAddresses': 'Alamat Pengiriman',
+    'accountSecurity': 'Keamanan Akun',
+    'viewAll': 'Lihat Semua',
+    'orderStatusProcessing': 'Diproses',
+    'orderStatusShipped': 'Dikirim',
+    'orderStatusCompleted': 'Selesai',
+    'stepOrderPlaced': 'Pesanan Dibuat',
+    'stepOrderPlacedDesc':
+        'Pesanan Anda telah kami terima dan sedang diproses.',
+    'stepShipped': 'Dikirim',
+    'stepShippedDesc': 'Paket Anda sedang dalam perjalanan.',
+    'stepCompleted': 'Selesai',
+    'stepCompletedDesc': 'Pesanan telah sampai di tujuan.',
+    'noOrdersWithStatus': 'Tidak ada pesanan dengan status ini.',
   };
 
   static String get(Locale locale, String key) {

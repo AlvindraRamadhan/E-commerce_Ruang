@@ -1,5 +1,3 @@
-// Lokasi: presentation/screens/main/profile_page.dart
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -96,23 +94,33 @@ class _ProfilePageState extends State<ProfilePage> {
                       context,
                       icon: Icons.shield_outlined,
                       title: "Keamanan Akun",
-                      onTap: () {
-                        // Aksi untuk keamanan akun
-                      },
+                      onTap: () {},
                     ),
                   ],
                 ),
                 const SizedBox(height: 24),
-                _buildSectionHeader(
-                    context, AppStrings.get(locale, 'profileOrderHistory')),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildSectionHeader(
+                        context, AppStrings.get(locale, 'profileOrderHistory')),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const OrderHistoryPage()));
+                        },
+                        child: const Text("Lihat Semua")),
+                  ],
+                ),
                 _buildOrderHistoryPreview(),
                 const SizedBox(height: 32),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: Theme.of(context).colorScheme.error,
-                    elevation: 0,
-                    side: BorderSide(color: Colors.grey.shade300),
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    foregroundColor: Theme.of(context).colorScheme.onError,
                   ),
                   onPressed: () => _showLogoutDialog(context),
                   child: Text(AppStrings.get(locale, 'logout')),
@@ -231,36 +239,13 @@ class _ProfilePageState extends State<ProfilePage> {
           return OrderModel.fromMap(data, documentId: doc.id);
         }).toList();
 
-        final recentOrders = allOrders.take(2);
+        final recentOrders = allOrders.take(2).toList();
 
         return Column(
           children: [
-            // PERBAIKAN: .toList() dihapus karena tidak perlu untuk spread operator
             ...recentOrders.map((order) {
-              return OrderHistoryCard(
-                order: order,
-                onTap: () {
-                  // Aksi untuk Fase 6.3
-                },
-              );
+              return OrderHistoryCard(order: order);
             }),
-
-            if (allOrders.length > 2)
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const OrderHistoryPage()));
-                      },
-                      child: const Text("Lihat Semua Riwayat")),
-                ),
-              )
           ],
         );
       },

@@ -2,20 +2,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:ruang/data/models/order_model.dart';
+import 'package:ruang/l10n/app_strings.dart';
+import 'package:ruang/presentation/providers/locale_provider.dart';
+import 'package:ruang/presentation/screens/main/order_details_page.dart';
 
 class OrderHistoryCard extends StatelessWidget {
   final OrderModel order;
-  final VoidCallback onTap;
 
   const OrderHistoryCard({
     super.key,
     required this.order,
-    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LocaleProvider>().locale;
     final currencyFormatter =
         NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
     final theme = Theme.of(context);
@@ -26,7 +29,14 @@ class OrderHistoryCard extends StatelessWidget {
       shadowColor: Colors.black12,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: onTap,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OrderDetailsPage(order: order),
+            ),
+          );
+        },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -36,21 +46,24 @@ class OrderHistoryCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Order #${order.paymentDetails["transactionId"]?.substring(0, 8) ?? order.id}',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      '${AppStrings.get(locale, 'orderId')} #${order.paymentDetails["transactionId"]?.substring(0, 8) ?? order.id}',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Chip(
                     label: Text(
                       order.status.toUpperCase(),
                       style: const TextStyle(
-                          fontSize: 10, fontWeight: FontWeight.bold),
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
-                    // PERBAIKAN: Mengganti withOpacity dengan withAlpha
-                    backgroundColor:
-                        theme.colorScheme.primaryContainer.withAlpha(128),
+                    backgroundColor: theme.colorScheme.primary.withAlpha(200),
                     padding: EdgeInsets.zero,
                     side: BorderSide.none,
                   ),
@@ -64,7 +77,7 @@ class OrderHistoryCard extends StatelessWidget {
               ),
               const Divider(height: 24),
               Text(
-                '${order.items.length} item(s)',
+                '${order.items.length} ${AppStrings.get(locale, 'orderItemCount')}',
                 style: theme.textTheme.bodyMedium
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
@@ -72,7 +85,8 @@ class OrderHistoryCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Total Pembayaran', style: theme.textTheme.bodyMedium),
+                  Text(AppStrings.get(locale, 'totalPayment'),
+                      style: theme.textTheme.bodyMedium),
                   Text(
                     currencyFormatter.format(order.total),
                     style: theme.textTheme.titleMedium?.copyWith(
