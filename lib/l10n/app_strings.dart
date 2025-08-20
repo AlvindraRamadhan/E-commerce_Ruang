@@ -48,7 +48,7 @@ class AppStrings {
     'searchHint': 'Search for your dream furniture...',
     'exploreCategories': 'Explore Categories',
     'allProducts': 'All Products',
-    'categoryAll': 'All', // Tambahan
+    'categoryAll': 'All',
     'categoryChair': 'Chair',
     'categoryTable': 'Table',
     'categoryLamp': 'Lamp',
@@ -170,11 +170,16 @@ class AppStrings {
     'continueToSummaryButton': 'Continue to Order Summary',
     'continueToSummaryWith': 'Continue to Summary with address ID:',
 
-    // Search Page (Tambahan Baru)
+    // Search Page
     'searchCategories': 'Categories',
     'searchPriceRange': 'Price Range',
     'searchResetFilter': 'Reset All Filters',
     'searchNoResults': 'Oops! No products found for your criteria.',
+
+    // Profile Page (Fase 6.2)
+    'profileOrderHistory': 'Order History',
+    'profileNoOrders': 'You have no orders yet.',
+    'profileUnnamedUser': 'Unnamed User',
   };
 
   static const Map<String, String> _id = {
@@ -224,7 +229,7 @@ class AppStrings {
     'searchHint': 'Cari furnitur impianmu...',
     'exploreCategories': 'Jelajahi Kategori',
     'allProducts': 'Semua Produk',
-    'categoryAll': 'Semua', // Tambahan
+    'categoryAll': 'Semua',
     'categoryChair': 'Kursi',
     'categoryTable': 'Meja',
     'categoryLamp': 'Lampu',
@@ -346,11 +351,16 @@ class AppStrings {
     'continueToSummaryButton': 'Lanjutkan ke Ringkasan Pesanan',
     'continueToSummaryWith': 'Lanjut ke Ringkasan dengan alamat ID:',
 
-    // Search Page (Tambahan Baru)
+    // Search Page
     'searchCategories': 'Kategori',
     'searchPriceRange': 'Rentang Harga',
     'searchResetFilter': 'Hapus Semua Filter',
     'searchNoResults': 'Oops! Produk yang kamu cari tidak ditemukan.',
+
+    // Halaman Profil (Fase 6.2)
+    'profileOrderHistory': 'Riwayat Pesanan',
+    'profileNoOrders': 'Anda belum memiliki pesanan.',
+    'profileUnnamedUser': 'Pengguna Tanpa Nama',
   };
 
   static String get(Locale locale, String key) {

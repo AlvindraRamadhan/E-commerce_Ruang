@@ -8,9 +8,9 @@ class OrderModel {
   final double subtotal;
   final double shippingCost;
   final double total;
-  final String status; 
+  final String status;
   final DateTime orderDate;
-  final Map<String, dynamic> paymentDetails; 
+  final Map<String, dynamic> paymentDetails;
 
   OrderModel({
     this.id,
@@ -37,5 +37,20 @@ class OrderModel {
       'orderDate': Timestamp.fromDate(orderDate),
       'paymentDetails': paymentDetails,
     };
+  }
+
+  factory OrderModel.fromMap(Map<String, dynamic> map, {String? documentId}) {
+    return OrderModel(
+      id: documentId,
+      userId: map['userId'] ?? '',
+      items: List<Map<String, dynamic>>.from(map['items'] ?? []),
+      shippingAddress: Map<String, dynamic>.from(map['shippingAddress'] ?? {}),
+      subtotal: (map['subtotal'] ?? 0).toDouble(),
+      shippingCost: (map['shippingCost'] ?? 0).toDouble(),
+      total: (map['total'] ?? 0).toDouble(),
+      status: map['status'] ?? 'unknown',
+      orderDate: (map['orderDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      paymentDetails: Map<String, dynamic>.from(map['paymentDetails'] ?? {}),
+    );
   }
 }

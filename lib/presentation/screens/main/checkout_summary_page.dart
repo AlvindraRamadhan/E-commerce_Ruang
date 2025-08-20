@@ -1,3 +1,5 @@
+// Lokasi: presentation/screens/main/checkout_summary_page.dart
+
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -50,25 +52,27 @@ class _CheckoutSummaryPageState extends State<CheckoutSummaryPage> {
   }
 
   void _handleTransactionResult(TransactionResult result) {
+    // PERBAIKAN FINAL: Menggunakan 'status' sebagai penentu utama
     final status = result.status;
+
     if (status == 'settlement') {
       _onPaymentSuccess(result.transactionId ?? 'N/A', result.paymentType);
     } else if (status == 'pending') {
       _onPaymentPending(result.transactionId ?? 'N/A');
-    } else if (status == 'failure') {
-      _onPaymentError('Pembayaran Gagal');
+    } else {
+      // Daripada menggunakan 'statusMessage' yang tidak pasti, kita buat pesan sendiri
+      _onPaymentError('Pembayaran Gagal atau Dibatalkan (Status: $status)');
     }
   }
 
   void _onPaymentSuccess(String transactionId, String? paymentMethod) {
     log("Pembayaran Sukses! Transaction ID: $transactionId");
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Pembayaran Berhasil!'), backgroundColor: Colors.green));
     _createOrderAndNavigate(transactionId, paymentMethod);
   }
 
   void _onPaymentPending(String transactionId) {
     log("Pembayaran Pending. Transaction ID: $transactionId");
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Pembayaran Anda sedang diproses.'),
         backgroundColor: Colors.orange));
@@ -76,6 +80,7 @@ class _CheckoutSummaryPageState extends State<CheckoutSummaryPage> {
 
   void _onPaymentError(String errorMessage) {
     log("Pembayaran Gagal. Error: $errorMessage");
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Pembayaran Gagal: $errorMessage'),
         backgroundColor: Colors.red));
@@ -88,22 +93,20 @@ class _CheckoutSummaryPageState extends State<CheckoutSummaryPage> {
     const double shippingCost = 15000;
     if (user == null) return;
 
-    final orderItems = cart.items
-        .map((cartItem) => {
-              'productId': cartItem.product.id,
-              'productName': cartItem.product.name,
-              'quantity': cartItem.quantity,
-              'price': cartItem.product.price,
-            })
-        .toList();
-
     final newOrder = OrderModel(
       userId: user.uid,
-      items: orderItems,
+      items: cart.items
+          .map((cartItem) => {
+                'productId': cartItem.product.id,
+                'productName': cartItem.product.name,
+                'quantity': cartItem.quantity,
+                'price': cartItem.product.price,
+              })
+          .toList(),
       shippingAddress: widget.selectedAddress.toMap(),
-      subtotal: cart.totalPrice,
+      subtotal: cart.totalPrice.toDouble(),
       shippingCost: shippingCost,
-      total: cart.totalPrice + shippingCost,
+      total: (cart.totalPrice + shippingCost).toDouble(),
       status: 'processing',
       orderDate: DateTime.now(),
       paymentDetails: {
@@ -113,21 +116,26 @@ class _CheckoutSummaryPageState extends State<CheckoutSummaryPage> {
     );
 
     try {
+      final navigator = Navigator.of(context);
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+
       await OrderService.createOrder(newOrder);
       cart.clearCart();
-      if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const OrderSuccessPage()),
-          (Route<dynamic> route) => false,
-        );
-      }
+
+      scaffoldMessenger.showSnackBar(const SnackBar(
+          content: Text('Pembayaran Berhasil! Pesanan dibuat.'),
+          backgroundColor: Colors.green));
+
+      navigator.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const OrderSuccessPage()),
+        (Route<dynamic> route) => false,
+      );
     } catch (e) {
       log("Gagal membuat pesanan: $e");
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Gagal menyimpan pesanan: $e'),
-            backgroundColor: Colors.red));
-      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Gagal menyimpan pesanan: $e'),
+          backgroundColor: Colors.red));
     }
   }
 
@@ -135,6 +143,8 @@ class _CheckoutSummaryPageState extends State<CheckoutSummaryPage> {
     setState(() => _isLoading = true);
     final cart = context.read<CartProvider>();
     const double shippingCost = 15000;
+
+    if (!mounted) return;
     final token = await PaymentService.createTransactionToken(
         cart, widget.selectedAddress, shippingCost);
 
@@ -146,7 +156,6 @@ class _CheckoutSummaryPageState extends State<CheckoutSummaryPage> {
     }
 
     if (kIsWeb) {
-      // PERBAIKAN: Menggunakan extension type yang sudah benar untuk memanggil dan membaca hasil
       web_payment.pay(
           token,
           web_payment.PayOptions(
@@ -168,7 +177,9 @@ class _CheckoutSummaryPageState extends State<CheckoutSummaryPage> {
       _midtransSDK?.startPaymentUiFlow(token: token);
     }
 
-    setState(() => _isLoading = false);
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -222,92 +233,92 @@ class _CheckoutSummaryPageState extends State<CheckoutSummaryPage> {
       ),
     );
   }
-}
 
-Widget _buildSectionHeader(BuildContext context, String title) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 8.0),
-    child: Text(title,
-        style: Theme.of(context)
-            .textTheme
-            .titleLarge
-            ?.copyWith(fontWeight: FontWeight.bold)),
-  );
-}
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Text(title,
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge
+              ?.copyWith(fontWeight: FontWeight.bold)),
+    );
+  }
 
-Widget _buildAddressCard(BuildContext context, Address address) {
-  return Card(
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(address.fullName,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 4),
-          Text(address.phoneNumber),
-          const SizedBox(height: 4),
-          Text(
-              '${address.address}, ${address.city}, ${address.province} ${address.postalCode}'),
-        ],
+  Widget _buildAddressCard(BuildContext context, Address address) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(address.fullName,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 4),
+            Text(address.phoneNumber),
+            const SizedBox(height: 4),
+            Text(
+                '${address.address}, ${address.city}, ${address.province} ${address.postalCode}'),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget _buildItemsList(CartProvider cart, NumberFormat formatter) {
-  return Card(
-    child: ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: cart.items.length,
-      separatorBuilder: (context, index) => const Divider(height: 1),
-      itemBuilder: (context, index) {
-        final item = cart.items[index];
-        return ListTile(
-          leading: Image.network(item.product.imageUrl,
-              width: 50, height: 50, fit: BoxFit.cover),
-          title: Text(item.product.name),
-          subtitle: Text(
-              '${item.quantity} x ${formatter.format(item.product.price)}'),
-          trailing: Text(formatter.format(item.subtotal),
-              style: const TextStyle(fontWeight: FontWeight.bold)),
-        );
-      },
-    ),
-  );
-}
-
-Widget _buildPriceDetails(BuildContext context, CartProvider cart,
-    NumberFormat formatter, double shipping, double total) {
-  final locale = context.read<LocaleProvider>().locale;
-  return Card(
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(AppStrings.get(locale, 'subtotal')),
-            Text(formatter.format(cart.totalPrice))
-          ]),
-          const SizedBox(height: 8),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(AppStrings.get(locale, 'shippingCost')),
-            Text(formatter.format(shipping))
-          ]),
-          const Divider(height: 24),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(AppStrings.get(locale, 'totalPayment'),
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            Text(formatter.format(total),
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Theme.of(context).colorScheme.primary)),
-          ]),
-        ],
+  Widget _buildItemsList(CartProvider cart, NumberFormat formatter) {
+    return Card(
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: cart.items.length,
+        separatorBuilder: (context, index) => const Divider(height: 1),
+        itemBuilder: (context, index) {
+          final item = cart.items[index];
+          return ListTile(
+            leading: Image.network(item.product.imageUrl,
+                width: 50, height: 50, fit: BoxFit.cover),
+            title: Text(item.product.name),
+            subtitle: Text(
+                '${item.quantity} x ${formatter.format(item.product.price)}'),
+            trailing: Text(formatter.format(item.subtotal),
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+          );
+        },
       ),
-    ),
-  );
+    );
+  }
+
+  Widget _buildPriceDetails(BuildContext context, CartProvider cart,
+      NumberFormat formatter, double shipping, double total) {
+    final locale = context.read<LocaleProvider>().locale;
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text(AppStrings.get(locale, 'subtotal')),
+              Text(formatter.format(cart.totalPrice))
+            ]),
+            const SizedBox(height: 8),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text(AppStrings.get(locale, 'shippingCost')),
+              Text(formatter.format(shipping))
+            ]),
+            const Divider(height: 24),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text(AppStrings.get(locale, 'totalPayment'),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16)),
+              Text(formatter.format(total),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.primary)),
+            ]),
+          ],
+        ),
+      ),
+    );
+  }
 }

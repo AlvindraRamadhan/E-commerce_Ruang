@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// Lokasi: data/models/address_model.dart
 
 class Address {
-  final String id;
+  final String? id;
   final String fullName;
   final String phoneNumber;
   final String address;
@@ -11,7 +11,7 @@ class Address {
   final bool isDefault;
 
   Address({
-    required this.id,
+    this.id,
     required this.fullName,
     required this.phoneNumber,
     required this.address,
@@ -20,20 +20,6 @@ class Address {
     required this.postalCode,
     this.isDefault = false,
   });
-
-  factory Address.fromSnapshot(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return Address(
-      id: doc.id,
-      fullName: data['fullName'] ?? '',
-      phoneNumber: data['phoneNumber'] ?? '',
-      address: data['address'] ?? '',
-      city: data['city'] ?? '',
-      province: data['province'] ?? '',
-      postalCode: data['postalCode'] ?? '',
-      isDefault: data['isDefault'] ?? false,
-    );
-  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -45,5 +31,19 @@ class Address {
       'postalCode': postalCode,
       'isDefault': isDefault,
     };
+  }
+
+  // FUNGSI PENTING YANG HILANG
+  factory Address.fromFirestore(Map<String, dynamic> data, String documentId) {
+    return Address(
+      id: documentId,
+      fullName: data['fullName'] ?? '',
+      phoneNumber: data['phoneNumber'] ?? '',
+      address: data['address'] ?? '',
+      city: data['city'] ?? '',
+      province: data['province'] ?? '',
+      postalCode: data['postalCode'] ?? '',
+      isDefault: data['isDefault'] ?? false,
+    );
   }
 }
