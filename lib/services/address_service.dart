@@ -1,5 +1,3 @@
-// Lokasi: services/address_service.dart
-
 import 'dart:developer' as developer;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +6,6 @@ import 'package:ruang/data/models/address_model.dart';
 class AddressService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // PERBAIKAN: Mengambil user di dalam fungsi agar tidak null
   static CollectionReference? _getAddressCollection() {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;

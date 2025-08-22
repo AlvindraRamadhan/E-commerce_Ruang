@@ -1,5 +1,3 @@
-// Lokasi: data/models/address_model.dart
-
 class Address {
   final String? id;
   final String fullName;
@@ -33,7 +31,6 @@ class Address {
     };
   }
 
-  // FUNGSI PENTING YANG HILANG
   factory Address.fromFirestore(Map<String, dynamic> data, String documentId) {
     return Address(
       id: documentId,

@@ -1,5 +1,3 @@
-// Lokasi: presentation/screens/main/shipping_address_page.dart
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +18,6 @@ class ShippingAddressPage extends StatefulWidget {
 class _ShippingAddressPageState extends State<ShippingAddressPage> {
   String? _selectedAddressId;
 
-  // Logika stream sekarang lebih bersih dan aman
   Stream<List<Address>> _getAddressesStream() {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -32,7 +29,6 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
         .collection('addresses')
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
-              // PERBAIKAN: Menggunakan fromFirestore yang benar
               return Address.fromFirestore(doc.data(), doc.id);
             }).toList());
   }
@@ -91,7 +87,6 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                   itemCount: addresses.length,
                   itemBuilder: (context, index) {
                     final address = addresses[index];
-                    // PERBAIKAN: Pastikan address.id tidak null
                     if (address.id == null) return const SizedBox.shrink();
 
                     return Card(
@@ -103,7 +98,6 @@ class _ShippingAddressPageState extends State<ShippingAddressPage> {
                                 const TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Text(
                             '${address.address}, ${address.city}, ${address.province} ${address.postalCode}\nTel: ${address.phoneNumber}'),
-                        // PERBAIKAN: address.id sekarang dijamin tidak null
                         value: address.id!,
                         groupValue: _selectedAddressId,
                         onChanged: (value) {

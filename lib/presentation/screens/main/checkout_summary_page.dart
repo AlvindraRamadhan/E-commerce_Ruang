@@ -1,5 +1,3 @@
-// Lokasi: presentation/screens/main/checkout_summary_page.dart
-
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -52,7 +50,6 @@ class _CheckoutSummaryPageState extends State<CheckoutSummaryPage> {
   }
 
   void _handleTransactionResult(TransactionResult result) {
-    // PERBAIKAN FINAL: Menggunakan 'status' sebagai penentu utama
     final status = result.status;
 
     if (status == 'settlement') {
@@ -60,7 +57,6 @@ class _CheckoutSummaryPageState extends State<CheckoutSummaryPage> {
     } else if (status == 'pending') {
       _onPaymentPending(result.transactionId ?? 'N/A');
     } else {
-      // Daripada menggunakan 'statusMessage' yang tidak pasti, kita buat pesan sendiri
       _onPaymentError('Pembayaran Gagal atau Dibatalkan (Status: $status)');
     }
   }

@@ -1,5 +1,3 @@
-// Lokasi: presentation/screens/main/address_list_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:ruang/data/models/address_model.dart';
 import 'package:ruang/services/address_service.dart';
@@ -27,9 +25,7 @@ class _AddressListPageState extends State<AddressListPage> {
         title: const Text("Alamat Saya"),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Aksi untuk menambah alamat baru
-        },
+        onPressed: () {},
         child: const Icon(Icons.add),
       ),
       body: FutureBuilder<List<Address>>(
@@ -52,9 +48,7 @@ class _AddressListPageState extends State<AddressListPage> {
                   title: Text(address.fullName),
                   subtitle: Text('${address.address}, ${address.city}'),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    // Aksi untuk mengedit alamat
-                  },
+                  onTap: () {},
                 ),
               );
             },

@@ -1,9 +1,12 @@
+// Lokasi: presentation/screens/auth/onboarding_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:ruang/l10n/app_strings.dart';
 import 'package:ruang/presentation/providers/locale_provider.dart';
 import 'package:ruang/presentation/screens/auth/auth_page.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // <-- IMPORT BARU
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -34,6 +37,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     },
   ];
 
+  // FUNGSI BARU UNTUK MENANDAI ONBOARDING SELESAI
+  void _finishOnboarding() async {
+    // Simpan "catatan" bahwa onboarding sudah selesai
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboardingComplete', true);
+
+    // Lanjutkan navigasi ke AuthPage
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AuthPage()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = context.watch<LocaleProvider>().locale;
@@ -62,37 +80,39 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                TextButton(
-                  onPressed: () => _controller.jumpToPage(introData.length - 1),
-                  child: Text(
-                    AppStrings.get(locale, 'skip'),
-                    style: TextStyle(color: Theme.of(context).primaryColor),
-                  ),
-                ),
+                // Tombol Skip
+                onLastPage
+                    ? const SizedBox(
+                        width: 80) // Placeholder agar posisi center
+                    : TextButton(
+                        onPressed: () =>
+                            _controller.jumpToPage(introData.length - 1),
+                        child: Text(
+                          AppStrings.get(locale, 'skip'),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ),
+
+                // Indikator Halaman
                 SmoothPageIndicator(
                   controller: _controller,
                   count: introData.length,
                   effect: WormEffect(
                     dotColor: Colors.grey.shade300,
-                    activeDotColor: Theme.of(context).primaryColor,
+                    activeDotColor: Theme.of(context).colorScheme.primary,
                   ),
                 ),
+
+                // Tombol Next / Done
                 onLastPage
                     ? TextButton(
-                        onPressed: () {
-                          // --- TUJUAN BARU ---
-                          // Arahkan ke AuthPage
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AuthPage(),
-                            ),
-                          );
-                        },
+                        onPressed: _finishOnboarding, // Panggil fungsi baru
                         child: Text(
                           AppStrings.get(locale, 'done'),
                           style: TextStyle(
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       )
@@ -106,7 +126,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         child: Text(
                           AppStrings.get(locale, 'next'),
                           style: TextStyle(
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                       ),
