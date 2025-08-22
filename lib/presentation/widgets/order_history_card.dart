@@ -1,17 +1,22 @@
+// Lokasi: presentation/widgets/order_history_card.dart
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:ruang/data/models/order_model.dart';
 import 'package:ruang/l10n/app_strings.dart';
 import 'package:ruang/presentation/providers/locale_provider.dart';
+import 'package:ruang/presentation/screens/main/admin_order_details_page.dart';
 import 'package:ruang/presentation/screens/main/order_details_page.dart';
 
 class OrderHistoryCard extends StatelessWidget {
   final OrderModel order;
+  final bool isAdmin;
 
   const OrderHistoryCard({
     super.key,
     required this.order,
+    this.isAdmin = false,
   });
 
   @override
@@ -28,12 +33,22 @@ class OrderHistoryCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => OrderDetailsPage(order: order),
-            ),
-          );
+          // Logika untuk membedakan tujuan navigasi
+          if (isAdmin) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdminOrderDetailsPage(order: order),
+              ),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OrderDetailsPage(order: order),
+              ),
+            );
+          }
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(

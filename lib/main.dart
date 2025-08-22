@@ -8,11 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:ruang/presentation/providers/cart_provider.dart';
 import 'package:ruang/presentation/providers/locale_provider.dart';
 import 'package:ruang/presentation/providers/main_screen_provider.dart';
-// PERBAIKAN DI SINI: Path ke splash_screen.dart diperbaiki
 import 'package:ruang/presentation/screens/auth/splash_screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,12 +19,6 @@ Future<void> main() async {
   // Inisialisasi Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  // Inisialisasi Supabase
-  await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL']!,
-    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
 
   runApp(

@@ -1,3 +1,4 @@
+// Lokasi: data/models/order_model.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrderModel {
@@ -11,6 +12,7 @@ class OrderModel {
   final String status;
   final DateTime orderDate;
   final Map<String, dynamic> paymentDetails;
+  final String? processedBy; // <-- TAMBAHAN BARU
 
   OrderModel({
     this.id,
@@ -23,6 +25,7 @@ class OrderModel {
     required this.status,
     required this.orderDate,
     required this.paymentDetails,
+    this.processedBy, // <-- TAMBAHAN BARU
   });
 
   Map<String, dynamic> toMap() {
@@ -36,6 +39,7 @@ class OrderModel {
       'status': status,
       'orderDate': Timestamp.fromDate(orderDate),
       'paymentDetails': paymentDetails,
+      'processedBy': processedBy, // <-- TAMBAHAN BARU
     };
   }
 
@@ -51,6 +55,7 @@ class OrderModel {
       status: map['status'] ?? 'unknown',
       orderDate: (map['orderDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
       paymentDetails: Map<String, dynamic>.from(map['paymentDetails'] ?? {}),
+      processedBy: map['processedBy'], // <-- TAMBAHAN BARU
     );
   }
 }

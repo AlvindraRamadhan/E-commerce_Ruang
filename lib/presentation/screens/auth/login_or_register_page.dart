@@ -1,6 +1,6 @@
 // Lokasi: presentation/screens/auth/login_or_register_page.dart
 
-import 'dart:ui';
+import 'dart:ui'; // <-- PERBAIKAN: Menggunakan 'dart:ui' yang benar
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,6 @@ import 'package:ruang/presentation/screens/auth/contact_us_page.dart';
 import 'package:ruang/presentation/screens/auth/faq_page.dart';
 import 'package:ruang/services/auth_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 class LoginOrRegisterPage extends StatefulWidget {
   const LoginOrRegisterPage({super.key});
@@ -134,15 +133,7 @@ class _LoginFormState extends State<LoginForm> {
   Future<void> _signInWithGoogle() async {
     setState(() => _isLoading = true);
     try {
-      final userCredential = await AuthService().signInWithGoogle();
-      if (userCredential?.user != null) {
-        // PERBAIKAN: 'upsert' akan membuat profil jika belum ada, atau mengabaikannya jika sudah ada.
-        // Ini memastikan pengguna Google selalu memiliki profil.
-        await supabase.Supabase.instance.client.from('profiles').upsert({
-          'id': userCredential!.user!.uid,
-          'email': userCredential.user!.email,
-        });
-      }
+      await AuthService().signInWithGoogle();
     } on Exception {
       _showErrorDialog();
     }
@@ -210,19 +201,10 @@ class _RegisterFormState extends State<RegisterForm> {
     }
     setState(() => _isLoading = true);
     try {
-      final userCredential = await AuthService().createUserWithEmailAndPassword(
+      await AuthService().createUserWithEmailAndPassword(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
-
-      // PERBAIKAN: Membuat profil di Supabase setelah user berhasil register
-      if (userCredential?.user != null) {
-        await supabase.Supabase.instance.client.from('profiles').insert({
-          'id': userCredential!.user!.uid,
-          'email': userCredential.user!.email,
-          // role akan otomatis 'user' karena itu nilai default di database
-        });
-      }
     } on Exception catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context)
@@ -272,8 +254,7 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 }
 
-// === AUTH CARD, AUTH TEXT FIELD, HELP SECTION (TIDAK ADA PERUBAHAN) ===
-
+// === AUTH CARD ===
 class AuthCard extends StatelessWidget {
   final bool isLoading;
   final String title;
@@ -398,6 +379,7 @@ class AuthCard extends StatelessWidget {
   }
 }
 
+// === AUTH TEXT FIELD ===
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
@@ -428,6 +410,7 @@ class AuthTextField extends StatelessWidget {
   }
 }
 
+// === HELP SECTION WIDGET ===
 class _HelpSection extends StatelessWidget {
   const _HelpSection();
 
