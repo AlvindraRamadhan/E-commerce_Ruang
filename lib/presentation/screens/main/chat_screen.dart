@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:ruang/l10n/app_strings.dart';
 import 'package:ruang/presentation/providers/locale_provider.dart';
-import 'dart:async';
+import 'package:ruang/services/gemini_service.dart';
+
+class ChatMessage {
+  final String text;
+  final bool isUser;
+  ChatMessage({required this.text, required this.isUser});
+}
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -14,101 +19,119 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
-  final List<Map<String, dynamic>> _messages = [];
+  final ScrollController _scrollController = ScrollController();
+  final List<ChatMessage> _messages = [];
   bool _isLoading = false;
 
-  Future<void> _sendMessage() async {
-    if (_controller.text.isEmpty || _isLoading) return;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final locale = context.read<LocaleProvider>().locale;
+      setState(() {
+        _messages.add(ChatMessage(
+            text: AppStrings.get(locale, 'geminiGreeting'), isUser: false));
+      });
+    });
+  }
 
-    final userMessage = _controller.text;
+  void _sendMessage() async {
+    final locale = context.read<LocaleProvider>().locale;
+    final text = _controller.text.trim();
+    if (text.isEmpty) return;
+
+    _controller.clear();
     setState(() {
-      _messages.insert(0, {"role": "user", "content": userMessage});
+      _messages.insert(0, ChatMessage(text: text, isUser: true));
       _isLoading = true;
     });
-    _controller.clear();
 
-    await Future.delayed(const Duration(milliseconds: 1500));
+    _scrollToBottom();
 
-    // FIX: Tambahkan pengecekan 'mounted' setelah proses async
-    if (!mounted) return;
+    final response = await GeminiService.getResponse(text, locale);
 
-    final locale = context.read<LocaleProvider>().locale;
-
-    setState(() {
-      _messages.insert(0, {
-        "role": "gemini",
-        "content": AppStrings.get(locale, 'chatPlaceholder'),
-        "isPlaceholder": true
+    if (mounted) {
+      setState(() {
+        _messages.insert(0, ChatMessage(text: response, isUser: false));
+        _isLoading = false;
       });
-      _isLoading = false;
-    });
+    }
+
+    _scrollToBottom();
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final locale = context.watch<LocaleProvider>().locale;
+    final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppStrings.get(locale, 'chatTitle'))),
+      appBar: AppBar(
+        title: Text(AppStrings.get(locale, 'chatTitle')),
+      ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
+              padding: const EdgeInsets.all(16),
               reverse: true,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
               itemCount: _messages.length,
               itemBuilder: (context, index) {
                 final message = _messages[index];
-                final isUser = message['role'] == 'user';
-                final isPlaceholder = message['isPlaceholder'] ?? false;
-
-                if (!isPlaceholder) {
-                  return Align(
-                    alignment:
-                        isUser ? Alignment.centerRight : Alignment.centerLeft,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 4),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: isUser
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Text(
-                        message['content']!,
-                        style: TextStyle(
-                            color: isUser ? Colors.white : Colors.black),
-                      ),
-                    ),
-                  );
-                } else {
-                  return Container(
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                    padding: const EdgeInsets.all(12),
+                return Align(
+                  alignment: message.isUser
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(16),
+                      color: message.isUser
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Column(
-                      children: [
-                        Lottie.asset('assets/images/error_animation.json',
-                            height: 150),
-                        const SizedBox(height: 8),
-                        Text(message['content']!, textAlign: TextAlign.center),
-                      ],
+                    child: Text(
+                      message.text,
+                      style: TextStyle(
+                        color: message.isUser
+                            ? theme.colorScheme.onPrimary
+                            : theme.colorScheme.onSurface,
+                      ),
                     ),
-                  );
-                }
+                  ),
+                );
               },
             ),
           ),
           if (_isLoading)
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: LinearProgressIndicator(),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Row(
+                children: [
+                  const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 3)),
+                  const SizedBox(width: 12),
+                  Text(AppStrings.get(locale, 'geminiTyping')),
+                ],
+              ),
             ),
+          const Divider(height: 1),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -119,19 +142,21 @@ class _ChatScreenState extends State<ChatScreen> {
                     decoration: InputDecoration(
                       hintText: AppStrings.get(locale, 'chatHint'),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: theme.colorScheme.surfaceContainerHighest,
                     ),
                     onSubmitted: (_) => _sendMessage(),
                   ),
                 ),
                 const SizedBox(width: 8),
-                IconButton(
+                IconButton.filled(
                   icon: const Icon(Icons.send),
-                  onPressed: _sendMessage,
-                  style: IconButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Colors.white,
-                  ),
+                  onPressed: _isLoading ? null : _sendMessage,
+                  style:
+                      IconButton.styleFrom(padding: const EdgeInsets.all(12)),
                 ),
               ],
             ),

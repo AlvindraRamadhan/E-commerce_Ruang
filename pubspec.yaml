@@ -38,6 +38,8 @@ dependencies:
   midtrans_sdk: ^1.0.1
   flutter_dotenv: ^5.2.1
   js: ^0.7.2
+  google_generative_ai: ^0.4.7
+  firebase_remote_config: ^4.4.7
 
 dev_dependencies:
   flutter_test:

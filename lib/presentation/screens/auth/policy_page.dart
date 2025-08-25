@@ -30,7 +30,8 @@ class PolicyPage extends StatelessWidget {
                 delegate: PolicySearchDelegate(
                   content: content,
                   // Mengirim string yang sudah diterjemahkan
-                  searchFieldLabelText: AppStrings.get(locale, 'policySearchHint'),
+                  searchFieldLabelText:
+                      AppStrings.get(locale, 'policySearchHint'),
                   noResultsText: AppStrings.get(locale, 'policyNoResults'),
                 ),
               );

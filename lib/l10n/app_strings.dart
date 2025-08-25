@@ -1,4 +1,3 @@
-// Lokasi: lib/l10n/app_strings.dart
 import 'package:flutter/widgets.dart';
 
 class AppStrings {
@@ -176,17 +175,11 @@ class AppStrings {
     'searchPriceRange': 'Price Range',
     'searchResetFilter': 'Reset All Filters',
     'searchNoResults': 'Oops! No products found for your criteria.',
-
-    // Profile Page
     'profileOrderHistory': 'Order History',
     'profileNoOrders': 'You have no orders yet.',
     'profileUnnamedUser': 'Unnamed User',
-    'accountSettings': 'My Account',
-    'shippingAddresses': 'Shipping Addresses',
-    'accountSecurity': 'Account Security',
-    'viewAll': 'View All',
 
-    // Order Pages (Fase 6.3)
+    // Order Details Page (Fase 6.3)
     'orderDetailsTitle': 'Order Details',
     'orderDetailsInfo': 'Order Information',
     'orderId': 'Order ID',
@@ -195,6 +188,10 @@ class AppStrings {
     'orderShippingAddress': 'Shipping Address',
     'orderProducts': 'Products Ordered',
     'orderItemCount': 'item(s)',
+    'accountSettings': 'My Account',
+    'shippingAddresses': 'Shipping Addresses',
+    'accountSecurity': 'Account Security',
+    'viewAll': 'View All',
     'orderStatusProcessing': 'Processing',
     'orderStatusShipped': 'Shipped',
     'orderStatusCompleted': 'Completed',
