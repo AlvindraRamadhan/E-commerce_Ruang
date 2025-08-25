@@ -77,8 +77,8 @@ Anda perlu menjalankan Google Chrome dengan mode keamanan web yang dinonaktifkan
   1.  Buka aplikasi **Terminal**.
   2.  Salin dan tempel (copy-paste) perintah di bawah ini, lalu tekan Enter.
       `bash
-    open -na "Google Chrome" --args --disable-web-security --user-data-dir="$HOME/DevChrome"
-    `
+open -na "Google Chrome" --args --disable-web-security --user-data-dir="$HOME/DevChrome"
+`
       > Perintah ini akan membuka jendela Google Chrome baru yang terpisah dan aman untuk pengujian.
 
 **Langkah 2: Lakukan Transaksi di Aplikasi RUANG**
@@ -97,7 +97,7 @@ Anda perlu menjalankan Google Chrome dengan mode keamanan web yang dinonaktifkan
 
 1.  Login ke aplikasi RUANG menggunakan akun admin:
     - **Email:** `admin@ruang.com`
-    - **Password:** `123456`
+    - **Password:** `password`
 2.  Dari dasbor admin, Anda bisa mengubah status pesanan yang baru saja dibuat dari "Diproses" menjadi "Dikirim" hingga "Selesai".
 
 ---
@@ -144,5 +144,5 @@ Anda perlu menjalankan Google Chrome dengan mode keamanan web yang dinonaktifkan
 
 5.  **Jalankan Aplikasi:**
     ```bash
-    flutter run
+    flutter run -d chrome --web-browser-flag="--disable-web-security"
     ```
